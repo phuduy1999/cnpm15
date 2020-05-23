@@ -139,7 +139,7 @@ public class ChangeView {
                         }
                         break;
                     case "BaoCao":
-                        if (q.equalsIgnoreCase("Nhân Viên")) {
+                        if (q.equalsIgnoreCase("Nhân viên")) {
                             JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
                             setChangeBackGround(kind);
                             return;

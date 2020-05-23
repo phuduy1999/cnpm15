@@ -44,13 +44,16 @@ public class StoreHouseJPanel extends javax.swing.JPanel {
 
     Connection conn = KetNoi.layKetNoi();
 
+    //private String userName;
+    
     public StoreHouseJPanel(String user) {
         initComponents();
-        username = user;
+        this.username = user;
+        System.out.println("Truy cập StoreHouse với username = " + username);
         loadComboboxLoai();
         loadComboboxSize();
         loadData();
-        jBtnXuatBaoCao.setEnabled(false);
+        jBtnXuatBaoCao.setEnabled(true);
         txtSoLuong.setEnabled(false);
     }
 
@@ -209,7 +212,7 @@ public class StoreHouseJPanel extends javax.swing.JPanel {
         String tenLoai = jcbLoai.getSelectedItem().toString();
         String maLoai = LayMaLoai(tenLoai);
 
-        String sql = "update GiayDep set TENSP = '" + tenSanPham + "', DONGIA = '" + donGiaSP + "', MALOAI = '" + maLoai + "'\n"
+        String sql = "update GiayDep set TENSP = N'" + tenSanPham + "', DONGIA = '" + donGiaSP + "', MALOAI = N'" + maLoai + "'\n"
                 + "where MASP = '" + maSanPham + "'";
         try {
             PreparedStatement ps1 = conn.prepareStatement(sql);
@@ -669,10 +672,32 @@ public class StoreHouseJPanel extends javax.swing.JPanel {
 
     private void jBtnXoaSanPhamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnXoaSanPhamActionPerformed
         // TODO add your handling code here:
+        String maSanPham, tenSanPham, donGiaSP, soLuongSP, sizeSP, loaiSP;
+        maSanPham = txtMaSanPham.getText();
+        tenSanPham = txtTenSanPham.getText();
+        donGiaSP = txtDonGia.getText();
+        soLuongSP = txtSoLuong.getText();
+        sizeSP = jcbSize.getSelectedItem().toString();
+        loaiSP = jcbLoai.getSelectedItem().toString();
         try {
+            if (maSanPham.equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã sản phẩm");
+        } else if (tenSanPham.equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên sản phẩm");
+        } else if (donGiaSP.equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập đơn giá sản phẩm");
+        } else if (soLuongSP.equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng sản phẩm");
+        } else if (sizeSP.equals("-Chọn Size-")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn size sản phẩm");
+        } else if (loaiSP.equals("-Chọn Loại-")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn loại sản phẩm");
+        }else{
+            
             XoaSanPham();
             loadData();
             JOptionPane.showMessageDialog(this, "Xóa thành công");
+            }
         } catch (Exception e) {
             System.err.println(e.toString());
         }
@@ -699,15 +724,24 @@ public class StoreHouseJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn size sản phẩm");
         } else if (loaiSP.equals("-Chọn Loại-")) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn loại sản phẩm");
-        } else if(!txtMaSanPham.getText().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 1))){
-            JOptionPane.showMessageDialog(this, "Mã sản phảm không thể sửa");
-        }else if(!jcbSize.getSelectedItem().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 5))){
-            JOptionPane.showMessageDialog(this, "Size không thể sửa, bạn có thể thêm 1 size mới");
-        }else {
+        } else if (txtMaSanPham.getText().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 1).toString())
+                & txtTenSanPham.getText().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 2).toString())
+                & txtDonGia.getText().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 3).toString()) 
+                & jcbLoai.getSelectedItem().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 6).toString()) 
+                & jcbSize.getSelectedItem().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 5).toString())) 
+        {
+                JOptionPane.showMessageDialog(this, "Bạn chưa sửa gì cả!!");
+        } else {
             try {
-                SuaGiayDep();
-                loadData();
-                JOptionPane.showMessageDialog(this, "Sửa thành công");
+                if (!txtMaSanPham.getText().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 1).toString())
+                    || !jcbSize.getSelectedItem().toString().equals(jTbSP.getValueAt(jTbSP.getSelectedRow(), 5).toString())   ) {
+                    JOptionPane.showMessageDialog(this, "Mã sản phảm và size không thể sửa");
+                } else {
+                    SuaGiayDep();
+                    loadData();
+                    JOptionPane.showMessageDialog(this, "Sửa thành công");
+                }
+                
             } catch (Exception e) {
                 System.err.println(e.toString());
             }

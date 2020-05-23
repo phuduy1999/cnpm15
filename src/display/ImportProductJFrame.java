@@ -75,43 +75,17 @@ class Product {
 }
 
 public class ImportProductJFrame extends javax.swing.JFrame {
-    String username;
+
     /**
      * Creates new form ImportProductJFrame
      */
-    Connection conn = KetNoi.layKetNoi();
+    KetNoi a = new KetNoi();
+    Connection conn = a.layKetNoi();
     ArrayList<Product> listProducts = new ArrayList<Product>();
-
-    public ImportProductJFrame() {
-        initComponents();
-        String maPhieuNhap;
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        //loadComboboxSize();
-        loadDataPhieuNhap();
-        loadComboBoxMaSP();
-        loadNgayThang();
-        ButtonGroup phieuNhapGroup = new ButtonGroup();
-        phieuNhapGroup.add(jRBTaoPhieuNhap);
-        phieuNhapGroup.add(jRBXemLaiPhieuNhap);
-        txtMaPhieuNhap1.setEnabled(false);
-        txtNhanVien.setEnabled(false);
-        jDateNhapHang.setEnabled(false);
-        jtbPhieuNhap.setEnabled(false);
-        jtbChiTietPhieuNhap.setEnabled(false);
-        jcbMaSP.setEnabled(false);
-        jcbSize.setEnabled(false);
-        txtSoLuong.setEnabled(false);
-        jBtnLuuCSDL.setEnabled(false);
-        jBtnXuatPhieu.setEnabled(false);
-        jBtnThemGiay.setEnabled(false);
-        jBtnSuaGiay.setEnabled(false);
-        jBtnXoaGiay.setEnabled(false);
-        jBtnLamMoiGiay.setEnabled(false);
-    }
-    
+    String userName;
     public ImportProductJFrame(String user) {
+
         initComponents();
-        username=user;
         String maPhieuNhap;
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         //loadComboboxSize();
@@ -122,6 +96,8 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         phieuNhapGroup.add(jRBTaoPhieuNhap);
         phieuNhapGroup.add(jRBXemLaiPhieuNhap);
         txtMaPhieuNhap1.setEnabled(false);
+        this.userName = user;
+        txtNhanVien.setText(this.userName);
         txtNhanVien.setEnabled(false);
         jDateNhapHang.setEnabled(false);
         jtbPhieuNhap.setEnabled(false);
@@ -147,8 +123,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
 
     public void loadComboboxSize(String maSP) {
         try {
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
             PreparedStatement ps = conn.prepareStatement("select CHITIETGD.SIZE"
                     + " from CHITIETGD where CHITIETGD.MASP = '" + maSP + "'"
                     + " and CHITIETGD.TRANGTHAI = 1");
@@ -163,8 +137,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
 
     public void loadComboBoxMaSP() {
         try {
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
             PreparedStatement ps = conn.prepareStatement("Select DISTINCT Masp from CHITIETGD where TRANGTHAI = '1'");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -180,8 +152,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
     public void loadDataPhieuNhap() {
         try {
             DefaultTableModel tbn = new DefaultTableModel();
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
             int number;
             Vector row, column;
             column = new Vector();
@@ -234,12 +204,7 @@ public class ImportProductJFrame extends javax.swing.JFrame {
 
     public void loadDataChiTietPhieuNhap(String maPhieuNhap) {
         try {
-            DefaultTableModel tbn = new DefaultTableModel();
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
-
-            System.out.println(maPhieuNhap);
-
+            DefaultTableModel tbn = new DefaultTableModel(); 
             String sql = "";
             sql = "select DISTINCT PHIEUNHAP.MAPN, GIAYDEP.MASP, CHITIETGD.SIZE, CTPN.SOLUONG\n"
                     + "FRom PHIEUNHAP, GIAYDEP, CHITIETGD, CTPN \n"
@@ -298,19 +263,17 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         String maNV = "";
 
         try {
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
-
+           
             String sql = "Select NHANVIEN.MANV \n"
                     + "from NHANVIEN\n"
-                    + "where NHANVIEN.USERNAME = '" + username + "'";
+                    + "where NHANVIEN.USERNAME = '" + userName + "'";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 maNV = rs.getString("MANV");
 
             }
-            //System.out.println("Ma Nhan Vien : " + maNV);
+            System.out.println("Ma Nhan Vien : " + maNV);
 
         } catch (Exception e) {
             System.err.println("Bi loi khi lay ma nhan vien trong tao phieu nhap");
@@ -322,8 +285,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         String maPN = "";
 
         try {
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
             String sql = "SELECT MAX(MAPN)\n"
                     + "  FROM PHIEUNHAP";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -344,8 +305,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         String soMaPN = "";
         int soPN = 0;
         try {
-            KetNoi a = new KetNoi();
-            Connection conn = a.layKetNoi();
             String sql = "SELECT COUNT(MAPN)\n"
                     + "FROM PHIEUNHAP";
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -362,8 +321,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
     }
 
     public void ThemChiTietPhieuNhap() {
-        KetNoi a = new KetNoi();
-        Connection conn = a.layKetNoi();
         String sqlChiTietPN = "insert into CTPN values(?,?,?,?)";
         try {
             PreparedStatement ps = conn.prepareStatement(sqlChiTietPN);
@@ -379,8 +336,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
     }
 
     public void SuaChiTietPhieuNhap() {
-        KetNoi a = new KetNoi();
-        Connection conn = a.layKetNoi();
         String maPN, maSP, size, soLuong;
         maPN = txtMaPhieuNhap1.getText();
         maSP = jcbMaSP.getSelectedItem().toString();
@@ -399,8 +354,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
     }
 
     public void XoaSanPhamOfChiTietPN() {
-        KetNoi a = new KetNoi();
-        Connection conn = a.layKetNoi();
         String maPN, maSP, size, soLuong;
         maPN = txtMaPhieuNhap1.getText();
         maSP = jcbMaSP.getSelectedItem().toString();
@@ -422,8 +375,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         String soLuongTrongKho = "";
         String sql = "select CHITIETGD.SOLUONGTON from CHITIETGD\n"
                 + "where CHITIETGD.MASP = '" + maSP + "' and CHITIETGD.SIZE = '" + size + "'";
-        KetNoi a = new KetNoi();
-        Connection conn = a.layKetNoi();
         try {
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -440,8 +391,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
 
     public void XuatPhieuNhap(String maPN) {
         try {
-            KetNoi a = new KetNoi();
-            Connection conn = KetNoi.layKetNoi();
             Hashtable map = new Hashtable();
             JasperReport report = JasperCompileManager.compileReport("src/display/rpPhieuNhap.jrxml");
 
@@ -622,11 +571,7 @@ public class ImportProductJFrame extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(0, 24, Short.MAX_VALUE)
-                                .addComponent(jDateNhapHang, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtNhanVien)))
+                        .addComponent(txtNhanVien))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -643,7 +588,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -657,7 +601,11 @@ public class ImportProductJFrame extends javax.swing.JFrame {
                                 .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtMaPhieuNhap1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 9, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jDateNhapHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -916,7 +864,7 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         if(jtbChiTietPhieuNhap.getRowCount()>0){
 ///////////////////////Tạo mới phiếu nhập////////////////////////
         //Lay ra maPN cuối cùng trong SQL
-        ImportProductJFrame layPN = new ImportProductJFrame();
+        ImportProductJFrame layPN = new ImportProductJFrame(userName);
         String Chuoi = layPN.LayMaPhieuNhap();
         int count = layPN.LaySoLuongPhieuNhap();
 
@@ -938,7 +886,7 @@ public class ImportProductJFrame extends javax.swing.JFrame {
             date = sdf.format(jDateNhapHang.getDate()); // Date->String
         };
 
-        ImportProductJFrame layNV = new ImportProductJFrame();
+        ImportProductJFrame layNV = new ImportProductJFrame(userName);
         String maNV = layNV.LayMaNhanVien();
 
         try {
@@ -947,7 +895,7 @@ public class ImportProductJFrame extends javax.swing.JFrame {
             ps1.setString(1, txtMaPhieuNhap1.getText());
             ps1.setString(2, date);
             ps1.setString(3, maNV);
-            ps1.executeUpdate();
+            ps1.execute();
             JOptionPane.showMessageDialog(this, "Đã tạo mới phiếu nhập!");
         } catch (Exception e) {
             e.toString();
@@ -981,7 +929,7 @@ public class ImportProductJFrame extends javax.swing.JFrame {
 ///////////////////////////////////////////////////////////////////////            
 
 /////////////////////update lai so luong cho chi tiet giay dep////////////  
-            ImportProductJFrame laySoLuongTon = new ImportProductJFrame();
+            ImportProductJFrame laySoLuongTon = new ImportProductJFrame(userName);
             String soLuongTon = laySoLuongTon.GetSoLuongTrongKho(maSP, size);
             System.out.println("So luong ton kho la : " + soLuongTon);
 
@@ -1097,40 +1045,6 @@ public class ImportProductJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMaPhieuNhap1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ImportProductJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ImportProductJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ImportProductJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ImportProductJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ImportProductJFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnLamMoiGiay;

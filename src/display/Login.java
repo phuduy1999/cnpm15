@@ -98,6 +98,10 @@ public class Login extends javax.swing.JFrame {
                 ps.setString(2, password);
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
+                    if(rs.getBoolean("TRANGTHAI")==false){
+                        JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khóa!");
+                        return;
+                    }
                     check = 1;
                     if (jCheckBox1.isSelected() && !rememberPreference) {
                         preferences.put("username", username);

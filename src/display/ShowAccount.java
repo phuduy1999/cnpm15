@@ -21,7 +21,9 @@ import javax.swing.table.DefaultTableModel;
  * @author User
  */
 public class ShowAccount extends javax.swing.JPanel {
+
     String username;
+
     /**
      * Creates new form ShowAccount
      */
@@ -29,17 +31,17 @@ public class ShowAccount extends javax.swing.JPanel {
         initComponents();
         this.layData();
     }
-    
+
     public ShowAccount(String user) {
         initComponents();
-        username=user;
+        username = user;
         this.layData();
     }
-    
-    private void layData(){
+
+    private void layData() {
         DefaultTableModel dtm = (DefaultTableModel) jTable_DSNhanVien.getModel();
         dtm.setNumRows(0);
-        Connection ketNoi =KetNoi.layKetNoi();
+        Connection ketNoi = KetNoi.layKetNoi();
         String sql = "select * from NHANVIEN,ACCOUNT where NHANVIEN.USERNAME=ACCOUNT.USERNAME";
         Vector vt;
         try {
@@ -52,7 +54,9 @@ public class ShowAccount extends javax.swing.JPanel {
                 vt.add(rs.getString("PHONE"));
                 vt.add(rs.getString("EMAIL"));
                 vt.add(rs.getString("USERNAME"));
+                vt.add(rs.getString("PASSWORD"));
                 vt.add(rs.getString("AUTHORIZE"));
+                vt.add(rs.getBoolean("TRANGTHAI"));
                 dtm.addRow(vt);
             }
             jTable_DSNhanVien.setModel(dtm);
@@ -63,57 +67,75 @@ public class ShowAccount extends javax.swing.JPanel {
             Logger.getLogger(ShowAccount.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void deleteUser(String username) {
+
+    private void deleteUser(String user) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql1 = "delete NHANVIEN where USERNAME='" + username + "'";
-        String sql2 = "delete ACCOUNT where USERNAME='" + username + "'";
-        try {
-            PreparedStatement ps = ketNoi.prepareStatement(sql2);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        String sql1 = "delete NHANVIEN where USERNAME='" + user + "'";
+        String sql2 = "delete ACCOUNT where USERNAME='" + user + "'";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql1);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql2);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
-    private int checkForm(String username, String password, String contact, String address, String fullName) {
+
+    private int checkForm(String user, String password, String contact, String address, String fullName) {
         int check = 0;
-        if (username.equals("")) {
+        if (user.equals("")) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Tên tài khoản không được bỏ trống");
+        } else if (user.matches("^[a-zA-Z0-9\\._\\-]{3,}$") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Tên tài khoản không đúng định dạng");
         } else if (password.equals("")) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Mật khẩu không được bỏ trống");
         } else if (contact.equals("")) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Số điện thoại không được bỏ trống");
+        } else if (contact.matches("^(\\+84|0)\\d{9,10}$") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Số điện thoại không đúng định dạng");
         } else if (address.equals("")) {
             check = 1;
-            JOptionPane.showMessageDialog(this, "Địa chỉ không được bỏ trống");
+            JOptionPane.showMessageDialog(this, "Email không được bỏ trống");
+        } else if (address.matches("^([a-zA-Z0-9](\\.|_){0,1})+[a-zA-Z0-9]+@[a-zA-Z0-9]+((\\.){0,1}[a-zA-Z0-9]){0,}\\.[a-zA-Z]{2,3}") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Email không đúng định dạng");
         } else if (fullName.equals("")) {
             check = 1;
-            JOptionPane.showMessageDialog(this, "Họ  tên không được bỏ trống");
+            JOptionPane.showMessageDialog(this, "Họ tên không được bỏ trống");
         }
         return check;
     }
 
-    private int checkUser(String username, String contact, String email) {
+    private int checkUser(String user, String contact, String email) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql = "select * from NHANVIEN where USERNAME ='" + username + "' OR PHONE= '" + contact + "' OR EMAIL='" + email + "'";
+        String sql = "select * from NHANVIEN,ACCOUNT where NHANVIEN.USERNAME=ACCOUNT.USERNAME"
+                + " and (NHANVIEN.USERNAME ='" + user + "' OR PHONE= '" + contact + "' OR EMAIL='" + email + "')";
         int result = 0;
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                if (rs.getString("USERNAME").equals(username)) {
-                    JOptionPane.showMessageDialog(this, "Tên tài khoản đã được sủ dụng!");
+            while (rs.next()) {
+                if (rs.getString("USERNAME").equals(user)) {
+                    JOptionPane.showMessageDialog(this, "Tên tài khoản đã được sử dụng!");
+                    if (rs.getBoolean("TRANGTHAI") == false) {
+                        result = 2;
+                        break;
+                    }
                 } else if (rs.getString("PHONE").equals(contact)) {
-                    JOptionPane.showMessageDialog(this, "Số điện thoại đã được sủ dụng!");
+                    JOptionPane.showMessageDialog(this, "Số điện thoại đã được sử dụng!");
+                } else if (rs.getString("EMAIL").equals(email)) {
+                    JOptionPane.showMessageDialog(this, "Email đã được sử dụng!");
                 }
                 result = 1;
             }
@@ -126,15 +148,16 @@ public class ShowAccount extends javax.swing.JPanel {
         return result;
     }
 
-    private void addUser(String username, String password, String power, String contact, String address, String fullName) {
+    private void addUser(String user, String password, String power, String contact, String address, String fullName) {
         Connection ketNoi = KetNoi.layKetNoi();
         String sql1 = "insert into NHANVIEN(HOTEN,PHONE,EMAIL,USERNAME) values (?,?,?,?)";
-        String sql2 = "insert into ACCOUNT values (?,?,?)";
+        String sql2 = "insert into ACCOUNT values (?,?,?,?)";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql2);
-            ps.setString(1, username);
+            ps.setString(1, user);
             ps.setString(2, password);
             ps.setString(3, power);
+            ps.setInt(4, 1);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -144,7 +167,7 @@ public class ShowAccount extends javax.swing.JPanel {
             ps.setString(1, fullName);
             ps.setString(2, contact);
             ps.setString(3, address);
-            ps.setString(4, username);
+            ps.setString(4, user);
             ps.executeUpdate();
             ps.close();
             ketNoi.close();
@@ -152,10 +175,10 @@ public class ShowAccount extends javax.swing.JPanel {
             Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    private int checkUsername(String username) {
+
+    private int checkUsername(String user) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql = "select * from ACCOUNT where USERNAME ='" + username + "'";
+        String sql = "select * from ACCOUNT where USERNAME ='" + user + "'";
         int result = 0;
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
@@ -173,10 +196,10 @@ public class ShowAccount extends javax.swing.JPanel {
         return result;
     }
 
-    private void editUser(String username, String password, String power, String contact, String address, String fullName) {
+    private void editUser(String user, String password, String power, String contact, String address, String fullName) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql1 = "update NHANVIEN set HOTEN=?,PHONE=?,EMAIL=? where USERNAME='" + username + "'";
-        String sql2 = "update ACCOUNT set PASSWORD=?,AUTHORIZE=? where USERNAME='" + username + "'";
+        String sql1 = "update NHANVIEN set HOTEN=?,PHONE=?,EMAIL=? where USERNAME='" + user + "'";
+        String sql2 = "update ACCOUNT set PASSWORD=?,AUTHORIZE=? where USERNAME='" + user + "'";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql2);
             ps.setString(1, password);
@@ -191,8 +214,69 @@ public class ShowAccount extends javax.swing.JPanel {
             ps.setString(2, contact);
             ps.setString(3, address);
             ps.executeUpdate();
+            ps.close();
+            ketNoi.close();
         } catch (SQLException ex) {
             Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private String chuanHoaChuoiHoTen(String hoTen) {
+        String ten = hoTen.trim().replaceAll("\\s+", " ");
+        if (ten.equals("")) {
+            return ten;
+        }
+        String[] arr = ten.split(" ");
+        String tmp = "";
+        for (String t : arr) {
+            t = t.substring(0, 1).toUpperCase() + t.substring(1, t.length());
+            tmp = tmp + t + " ";
+        }
+        ten = tmp.trim();
+        return ten;
+    }
+
+    private int checkNV_CoCongViec(String user) {
+        int check = 0; // chua thuc hien cong viec nao
+        Connection ketNoi = KetNoi.layKetNoi();
+        String sql1 = "select * from NHANVIEN,PHIEUNHAP where NHANVIEN.MANV=PHIEUNHAP.MANV and NHANVIEN.USERNAME=?";
+        String sql2 = "select * from NHANVIEN,HOADON where NHANVIEN.MANV=HOADON.MANV and NHANVIEN.USERNAME=?";
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql1);
+            ps.setString(1, user);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                check = 1;//da thuc hien cv
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql2);
+            ps.setString(1, user);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                check = 1;//da thuc hien cv
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return check;
+    }
+
+    private void doiTrangThai(String user, boolean on_off) {
+        Connection ketNoi = KetNoi.layKetNoi();
+        String sql = "update ACCOUNT set TRANGTHAI=? where USERNAME=?";
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql);
+            ps.setBoolean(1, on_off);
+            ps.setString(2, user);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowAccount.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -210,7 +294,7 @@ public class ShowAccount extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         jTextField_TenDN = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2_MK = new javax.swing.JTextField();
+        jTextField_MK = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -294,7 +378,7 @@ public class ShowAccount extends javax.swing.JPanel {
             }
         });
 
-        jComboBox_ChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân Viên", "boss" }));
+        jComboBox_ChucVu.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nhân viên", "boss" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -315,7 +399,7 @@ public class ShowAccount extends javax.swing.JPanel {
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTextField_TenDN)
-                                    .addComponent(jTextField2_MK)
+                                    .addComponent(jTextField_MK)
                                     .addComponent(jComboBox_ChucVu, 0, 216, Short.MAX_VALUE))
                                 .addGap(88, 88, 88))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -354,7 +438,7 @@ public class ShowAccount extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2_MK, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField_MK, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTextField_SDT, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -380,7 +464,7 @@ public class ShowAccount extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã NV", "Họ Tên", "SDT", "Email", "Tên Đăng Nhập", "Chức vụ"
+                "Mã NV", "Họ Tên", "SDT", "Email", "Tên Đăng Nhập", "Mật khẩu", "Chức vụ", "Trạng thái"
             }
         ));
         jTable_DSNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -389,6 +473,9 @@ public class ShowAccount extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable_DSNhanVien);
+        if (jTable_DSNhanVien.getColumnModel().getColumnCount() > 0) {
+            jTable_DSNhanVien.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 153, 153));
@@ -435,49 +522,74 @@ public class ShowAccount extends javax.swing.JPanel {
                 .addContainerGap(41, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-    
+
     private void jButton_XoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XoaActionPerformed
-        // TODO add your handling code here:
-         String username = jTextField_TenDN.getText();
-        int result = checkUsername(username);
+        String user = jTextField_TenDN.getText();
+        int result = checkUsername(user);
         if (result == 0) {
-            this.deleteUser(username);
-            JOptionPane.showMessageDialog(this, "Xóa tài khoản thành công !!");
+            int check = checkNV_CoCongViec(user);
+            if (check == 0) {
+                Object[] options = {"Đồng ý", "Hủy"};
+                int chon = JOptionPane.showOptionDialog(this, "Bạn có chắc muốn xóa nhân viên này không?",
+                        "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (chon == JOptionPane.YES_OPTION) {
+                    this.deleteUser(user);
+                    JOptionPane.showMessageDialog(this, "Xóa tài khoản và thông tin nhân viên thành công !!");
+                }
+
+            } else {
+                Object[] options = {"Đồng ý", "Hủy"};
+                int chon = JOptionPane.showOptionDialog(this, "Nhân viên đã có thực hiện công việc. Bạn có chắc muốn xóa không?",
+                        "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (chon == JOptionPane.YES_OPTION) {
+                    doiTrangThai(user, false);
+                    JOptionPane.showMessageDialog(this, "Khóa tài khoản nhân viên thành công !!");
+                }
+            }
             this.layData();
         }
     }//GEN-LAST:event_jButton_XoaActionPerformed
-    
+
     private void jButton_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ThemActionPerformed
-        String username = jTextField_TenDN.getText();
-        String password = jTextField2_MK.getText();
+        String user = jTextField_TenDN.getText();
+        String password = jTextField_MK.getText();
         String contact = jTextField_SDT.getText();
         String address = jTextField_Email.getText();
-        String fullName = jTextField_TenNV.getText();
-        String power="";
+        String fullName = chuanHoaChuoiHoTen(jTextField_TenNV.getText());
+        String power = "";
         power = (String) jComboBox_ChucVu.getSelectedItem();
-        int checkForm = this.checkForm(username, password, contact, address, fullName);
+        int checkForm = this.checkForm(user, password, contact, address, fullName);
         if (checkForm != 1) {
-            int result = checkUser(username, contact, address);
+            int result = checkUser(user, contact, address);
             if (result == 0) {
-                this.addUser(username, password, power, contact, address, fullName);
+                this.addUser(user, password, power, contact, address, fullName);
                 JOptionPane.showMessageDialog(this, "Đăng ký tài khoản thành công !!");
-                this.layData();
+            } else if (result == 2) {
+                Object[] options = {"Đồng ý", "Hủy"};
+                int chon = JOptionPane.showOptionDialog(this, "Tài khoản và thông tin nhân viên đã bị khóa. "
+                        + "Bạn có muốn khôi phục không?",
+                        "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                if (chon == JOptionPane.YES_OPTION) {
+                    doiTrangThai(user, true);
+                    JOptionPane.showMessageDialog(this, "Khôi phục tài khoản nhân viên thành công !!");
+                }
             }
+            this.layData();
         }
     }//GEN-LAST:event_jButton_ThemActionPerformed
-    
+
     private void jButton_SuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SuaActionPerformed
-        String username = jTextField_TenDN.getText();
-        String password = jTextField2_MK.getText();
+        String user = jTextField_TenDN.getText();
+        String password = jTextField_MK.getText();
         String contact = jTextField_SDT.getText();
         String address = jTextField_Email.getText();
         String fullName = jTextField_TenNV.getText();
         String power = (String) jComboBox_ChucVu.getSelectedItem();
-        int checkForm = this.checkForm(username, password, contact, address, fullName);
+        int checkForm = this.checkForm(user, password, contact, address, fullName);
         if (checkForm != 1) {
-            int result = checkUsername(username);
+            int result = checkUsername(user);
             if (result == 0) {
-                this.editUser(username, password, power, contact, address, fullName);
+                this.editUser(user, password, power, contact, address, fullName);
                 JOptionPane.showMessageDialog(this, "Chỉnh sửa tài khoản thành công !!");
                 this.layData();
             }
@@ -486,21 +598,23 @@ public class ShowAccount extends javax.swing.JPanel {
 
     private void jButton_LamLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LamLaiActionPerformed
         jTextField_TenDN.setText("");
-        jTextField2_MK.setText("");
+        jTextField_MK.setText("");
         jTextField_TenNV.setText("");
         jTextField_SDT.setText("");
         jTextField_Email.setText("");
+        jComboBox_ChucVu.setSelectedItem("Nhân viên");
     }//GEN-LAST:event_jButton_LamLaiActionPerformed
 
     private void jTable_DSNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DSNhanVienMouseClicked
-        DefaultTableModel dtm=(DefaultTableModel) jTable_DSNhanVien.getModel();
+        DefaultTableModel dtm = (DefaultTableModel) jTable_DSNhanVien.getModel();
         int i = jTable_DSNhanVien.getSelectedRow();
-        
+
         jTextField_TenNV.setText(dtm.getValueAt(i, 1).toString());
         jTextField_SDT.setText(dtm.getValueAt(i, 2).toString());
         jTextField_Email.setText(dtm.getValueAt(i, 3).toString());
         jTextField_TenDN.setText(dtm.getValueAt(i, 4).toString());
-        jComboBox_ChucVu.setSelectedItem(dtm.getValueAt(i, 5));
+        jTextField_MK.setText(dtm.getValueAt(i, 5).toString());
+        jComboBox_ChucVu.setSelectedItem(dtm.getValueAt(i, 6));
     }//GEN-LAST:event_jTable_DSNhanVienMouseClicked
 
 
@@ -522,8 +636,8 @@ public class ShowAccount extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_DSNhanVien;
-    private javax.swing.JTextField jTextField2_MK;
     private javax.swing.JTextField jTextField_Email;
+    private javax.swing.JTextField jTextField_MK;
     private javax.swing.JTextField jTextField_SDT;
     private javax.swing.JTextField jTextField_TenDN;
     private javax.swing.JTextField jTextField_TenNV;
