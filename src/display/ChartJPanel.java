@@ -13,9 +13,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -66,9 +73,9 @@ public class ChartJPanel extends javax.swing.JPanel {
                 PlotOrientation.VERTICAL,
                 true, true, false);
         ChartPanel chartPanel = new ChartPanel(lineChart);
-        jPanel1.removeAll();
-        jPanel1.add(chartPanel, BorderLayout.CENTER);
-        jPanel1.validate();
+        jPanel_BieuDo.removeAll();
+        jPanel_BieuDo.add(chartPanel, BorderLayout.CENTER);
+        jPanel_BieuDo.validate();
     }
 
     private int checkDate(Date date1, Date date2) {
@@ -83,6 +90,20 @@ public class ChartJPanel extends javax.swing.JPanel {
         }
         return result;
     }
+    
+    private void xuatBaoCaoDoanhThu(String date1,String date2) {
+        Connection ketNoi = KetNoi.layKetNoi();
+        Hashtable map = new Hashtable();
+        try {
+            JasperReport report = JasperCompileManager.compileReport("src/display/rpBaoCaoDoanhThu.jrxml");
+            map.put("date1", date1);
+            map.put("date2", date2);
+            JasperPrint p = JasperFillManager.fillReport(report, map, ketNoi);
+            JasperViewer.viewReport(p, false);
+        } catch (JRException ex) {
+            Logger.getLogger(ProductJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -93,25 +114,26 @@ public class ChartJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
+        jPanel_BieuDo = new javax.swing.JPanel();
+        jDateChooser_TuNgay = new com.toedter.calendar.JDateChooser();
+        jDateChooser_DenNgay = new com.toedter.calendar.JDateChooser();
+        jButton_XacNhan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jButton_XuatBaoCaoDoanhThu = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(0, 0, 0));
 
-        jPanel1.setBackground(new java.awt.Color(102, 102, 102));
-        jPanel1.setLayout(new java.awt.BorderLayout());
+        jPanel_BieuDo.setBackground(new java.awt.Color(102, 102, 102));
+        jPanel_BieuDo.setLayout(new java.awt.BorderLayout());
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setForeground(new java.awt.Color(255, 153, 153));
-        jButton1.setText("Xác Nhận");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_XacNhan.setBackground(new java.awt.Color(0, 0, 0));
+        jButton_XacNhan.setForeground(new java.awt.Color(255, 153, 153));
+        jButton_XacNhan.setText("Xác Nhận");
+        jButton_XacNhan.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
+        jButton_XacNhan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_XacNhanActionPerformed(evt);
             }
         });
 
@@ -123,68 +145,88 @@ public class ChartJPanel extends javax.swing.JPanel {
         jLabel2.setForeground(new java.awt.Color(255, 153, 153));
         jLabel2.setText("Ngày cuối cùng lấy thông tin");
 
+        jButton_XuatBaoCaoDoanhThu.setBackground(new java.awt.Color(0, 0, 0));
+        jButton_XuatBaoCaoDoanhThu.setForeground(new java.awt.Color(255, 153, 153));
+        jButton_XuatBaoCaoDoanhThu.setText("Xuất báo cáo doanh thu");
+        jButton_XuatBaoCaoDoanhThu.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
+        jButton_XuatBaoCaoDoanhThu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_XuatBaoCaoDoanhThuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel_BieuDo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
+                    .addComponent(jDateChooser_TuNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jDateChooser_DenNgay, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton_XacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton_XuatBaoCaoDoanhThu))
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(76, 76, 76)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(119, 119, 119))
+                .addContainerGap(137, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(26, 26, 26))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jPanel_BieuDo, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 21, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jDateChooser_TuNgay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jDateChooser_DenNgay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton_XacNhan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_XuatBaoCaoDoanhThu, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(26, 26, 26))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+    private void jButton_XacNhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XacNhanActionPerformed
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        int result = this.checkDate(jDateChooser1.getDate(), jDateChooser2.getDate());
+        int result = this.checkDate(jDateChooser_TuNgay.getDate(), jDateChooser_DenNgay.getDate());
         if (result == 0) {
-            String date1 = sdf.format(jDateChooser1.getDate());
-            String date2 = sdf.format(jDateChooser2.getDate());
+            String date1 = sdf.format(jDateChooser_TuNgay.getDate());
+            String date2 = sdf.format(jDateChooser_DenNgay.getDate());
             this.addChart(date1, date2);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton_XacNhanActionPerformed
+
+    private void jButton_XuatBaoCaoDoanhThuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XuatBaoCaoDoanhThuActionPerformed
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        int result = this.checkDate(jDateChooser_TuNgay.getDate(), jDateChooser_DenNgay.getDate());
+        if (result == 0) {
+            String date1 = sdf.format(jDateChooser_TuNgay.getDate());
+            String date2 = sdf.format(jDateChooser_DenNgay.getDate());
+            this.xuatBaoCaoDoanhThu(date1, date2);
+        }
+    }//GEN-LAST:event_jButton_XuatBaoCaoDoanhThuActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.JButton jButton_XacNhan;
+    private javax.swing.JButton jButton_XuatBaoCaoDoanhThu;
+    private com.toedter.calendar.JDateChooser jDateChooser_DenNgay;
+    private com.toedter.calendar.JDateChooser jDateChooser_TuNgay;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel_BieuDo;
     // End of variables declaration//GEN-END:variables
 }

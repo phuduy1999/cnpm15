@@ -6,6 +6,8 @@
 package display;
 
 import Conection.KetNoi;
+import Controller.ChangeView;
+import java.awt.Window;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,15 +25,11 @@ import javax.swing.table.DefaultTableModel;
 public class ShowAccount extends javax.swing.JPanel {
 
     String username;
+    String userCanSua;
 
     /**
      * Creates new form ShowAccount
      */
-    public ShowAccount() {
-        initComponents();
-        this.layData();
-    }
-
     public ShowAccount(String user) {
         initComponents();
         username = user;
@@ -117,6 +115,27 @@ public class ShowAccount extends javax.swing.JPanel {
         return check;
     }
 
+    private int checkFormForAdmin(String fullName, String contact, String address) {
+        int check = 0;
+        if (contact.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Số điện thoại không được bỏ trống");
+        } else if (contact.matches("^(\\+84|0)\\d{9,10}$") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Số điện thoại không đúng định dạng");
+        } else if (address.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Email không được bỏ trống");
+        } else if (address.matches("^([a-zA-Z0-9](\\.|_){0,1})+[a-zA-Z0-9]+@[a-zA-Z0-9]+((\\.){0,1}[a-zA-Z0-9]){0,}\\.[a-zA-Z]{2,3}") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Email không đúng định dạng");
+        } else if (fullName.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Họ tên không được bỏ trống");
+        }
+        return check;
+    }
+
     private int checkUser(String user, String contact, String email) {
         Connection ketNoi = KetNoi.layKetNoi();
         String sql = "select * from NHANVIEN,ACCOUNT where NHANVIEN.USERNAME=ACCOUNT.USERNAME"
@@ -127,11 +146,11 @@ public class ShowAccount extends javax.swing.JPanel {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 if (rs.getString("USERNAME").equals(user)) {
-                    JOptionPane.showMessageDialog(this, "Tên tài khoản đã được sử dụng!");
                     if (rs.getBoolean("TRANGTHAI") == false) {
                         result = 2;
                         break;
                     }
+                    JOptionPane.showMessageDialog(this, "Tên tài khoản đã được sử dụng!");
                 } else if (rs.getString("PHONE").equals(contact)) {
                     JOptionPane.showMessageDialog(this, "Số điện thoại đã được sử dụng!");
                 } else if (rs.getString("EMAIL").equals(email)) {
@@ -196,23 +215,26 @@ public class ShowAccount extends javax.swing.JPanel {
         return result;
     }
 
-    private void editUser(String user, String password, String power, String contact, String address, String fullName) {
+    private void suaNV(String user, String password, String chucVu, String hoTen, String sdt, String email) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql1 = "update NHANVIEN set HOTEN=?,PHONE=?,EMAIL=? where USERNAME='" + user + "'";
-        String sql2 = "update ACCOUNT set PASSWORD=?,AUTHORIZE=? where USERNAME='" + user + "'";
+        String sql1 = "update ACCOUNT set USERNAME=?,PASSWORD=?,AUTHORIZE=? where USERNAME=?";
+        String sql2 = "update NHANVIEN set HOTEN=?,PHONE=?,EMAIL=? where USERNAME=?";
         try {
-            PreparedStatement ps = ketNoi.prepareStatement(sql2);
-            ps.setString(1, password);
-            ps.setString(2, power);
+            PreparedStatement ps = ketNoi.prepareStatement(sql1);
+            ps.setString(1, user);
+            ps.setString(2, password);
+            ps.setString(3, chucVu);
+            ps.setString(4, userCanSua);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(ReportJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            PreparedStatement ps = ketNoi.prepareStatement(sql1);
-            ps.setString(1, fullName);
-            ps.setString(2, contact);
-            ps.setString(3, address);
+            PreparedStatement ps = ketNoi.prepareStatement(sql2);
+            ps.setString(1, hoTen);
+            ps.setString(2, sdt);
+            ps.setString(3, email);
+            ps.setString(4, user); //username ben bang nhanvien da tu update thanh ten user moi
             ps.executeUpdate();
             ps.close();
             ketNoi.close();
@@ -278,6 +300,55 @@ public class ShowAccount extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(ShowAccount.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private String layQuyen(String user) {
+        Connection ketNoi = KetNoi.layKetNoi();
+        String sql = "select AUTHORIZE from ACCOUNT where USERNAME=?";
+        String quyen = "";
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql);
+            ps.setString(1, user);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                quyen = rs.getString(1);
+            }
+            rs.close();
+            ps.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ChangeView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return quyen;
+    }
+
+    private void suaAdmin(String hoTen, String sdt, String email) {
+        Connection ketNoi = KetNoi.layKetNoi();
+        String sql = "update NHANVIEN set HOTEN=?,PHONE=?,EMAIL=? where USERNAME='admin'";
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql);
+            ps.setString(1, hoTen);
+            ps.setString(2, sdt);
+            ps.setString(3, email);
+            ps.executeUpdate();
+            ps.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(ShowAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void lamLai() {
+        jTextField_TenDN.setText("");
+        jTextField_MK.setText("");
+        jTextField_TenNV.setText("");
+        jTextField_SDT.setText("");
+        jTextField_Email.setText("");
+        jComboBox_ChucVu.setSelectedItem("Nhân viên");
+        jTextField_TenDN.setEnabled(true);
+        jTextField_MK.setEnabled(true);
+        jComboBox_ChucVu.setEnabled(true);
+        jTextField_MK.setEnabled(true);
     }
 
     /**
@@ -524,7 +595,16 @@ public class ShowAccount extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_XoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XoaActionPerformed
+        userCanSua = "";
         String user = jTextField_TenDN.getText();
+        String quyen = layQuyen(user);
+        if (quyen.equals("admin")) {
+            JOptionPane.showMessageDialog(this, "Bạn không thể xóa tài khoản admin!");
+            return;
+        } else if (user.equals(username)) {
+            JOptionPane.showMessageDialog(this, "Bạn không thể xóa tài khoản của chính bạn. Tài khoản đang đăng nhập!");
+            return;
+        }
         int result = checkUsername(user);
         if (result == 0) {
             int check = checkNV_CoCongViec(user);
@@ -535,8 +615,8 @@ public class ShowAccount extends javax.swing.JPanel {
                 if (chon == JOptionPane.YES_OPTION) {
                     this.deleteUser(user);
                     JOptionPane.showMessageDialog(this, "Xóa tài khoản và thông tin nhân viên thành công !!");
+                    lamLai();
                 }
-
             } else {
                 Object[] options = {"Đồng ý", "Hủy"};
                 int chon = JOptionPane.showOptionDialog(this, "Nhân viên đã có thực hiện công việc. Bạn có chắc muốn xóa không?",
@@ -544,6 +624,7 @@ public class ShowAccount extends javax.swing.JPanel {
                 if (chon == JOptionPane.YES_OPTION) {
                     doiTrangThai(user, false);
                     JOptionPane.showMessageDialog(this, "Khóa tài khoản nhân viên thành công !!");
+                    lamLai();
                 }
             }
             this.layData();
@@ -551,6 +632,7 @@ public class ShowAccount extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton_XoaActionPerformed
 
     private void jButton_ThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ThemActionPerformed
+        userCanSua = "";
         String user = jTextField_TenDN.getText();
         String password = jTextField_MK.getText();
         String contact = jTextField_SDT.getText();
@@ -564,6 +646,7 @@ public class ShowAccount extends javax.swing.JPanel {
             if (result == 0) {
                 this.addUser(user, password, power, contact, address, fullName);
                 JOptionPane.showMessageDialog(this, "Đăng ký tài khoản thành công !!");
+                lamLai();
             } else if (result == 2) {
                 Object[] options = {"Đồng ý", "Hủy"};
                 int chon = JOptionPane.showOptionDialog(this, "Tài khoản và thông tin nhân viên đã bị khóa. "
@@ -572,49 +655,90 @@ public class ShowAccount extends javax.swing.JPanel {
                 if (chon == JOptionPane.YES_OPTION) {
                     doiTrangThai(user, true);
                     JOptionPane.showMessageDialog(this, "Khôi phục tài khoản nhân viên thành công !!");
+                    lamLai();
                 }
             }
             this.layData();
         }
     }//GEN-LAST:event_jButton_ThemActionPerformed
 
+
     private void jButton_SuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SuaActionPerformed
-        String user = jTextField_TenDN.getText();
-        String password = jTextField_MK.getText();
-        String contact = jTextField_SDT.getText();
-        String address = jTextField_Email.getText();
-        String fullName = jTextField_TenNV.getText();
-        String power = (String) jComboBox_ChucVu.getSelectedItem();
-        int checkForm = this.checkForm(user, password, contact, address, fullName);
-        if (checkForm != 1) {
-            int result = checkUsername(user);
-            if (result == 0) {
-                this.editUser(user, password, power, contact, address, fullName);
-                JOptionPane.showMessageDialog(this, "Chỉnh sửa tài khoản thành công !!");
-                this.layData();
+        if (jTextField_TenDN.getText().equals("admin")) {// sua danh cho admin tk admin
+            if (username.equals("admin")) {
+                int check = checkFormForAdmin(jTextField_TenNV.getText(), jTextField_SDT.getText(), jTextField_Email.getText());
+                if (check != 1) {
+                    suaAdmin(jTextField_TenNV.getText(), jTextField_SDT.getText(), jTextField_Email.getText());
+                    JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
+                    layData();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Bạn không đủ quyền để sửa tài khoản admin");
+            }
+        } else {
+            String user = jTextField_TenDN.getText();
+            String sdt = jTextField_SDT.getText();
+            String email = jTextField_Email.getText();
+            String tenNV = jTextField_TenNV.getText();
+            String password = jTextField_MK.getText();
+            String chucVu = jComboBox_ChucVu.getSelectedItem().toString();
+            int check = checkForm(user, password, sdt, email, tenNV);
+            int check2 = checkUsername(userCanSua);
+            if (check != 1 && check2 != 1) {
+                if (userCanSua.equals(username) && userCanSua.equals(user) == false) {//sua tk đang đăng nhập va có đổi tên đn
+                    Object[] options = {"Đồng ý", "Hủy"};
+                    int chon = JOptionPane.showOptionDialog(this, "Bạn cần đăng xuất và đăng nhập lại sau khi sửa tên đăng nhập?",
+                            "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    if (chon == JOptionPane.YES_OPTION) {
+                        suaNV(user, password, chucVu, tenNV, sdt, email);
+                        JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
+                        layData();
+                        ((Window) getRootPane().getParent()).dispose(); //đóng cửa số sau khi sửa
+                        Login loginFrame = new Login(true);
+                        loginFrame.setTitle("Đăng Nhập Hệ Thống");
+                        loginFrame.setResizable(false);
+                        loginFrame.setLocationRelativeTo(null);
+                        loginFrame.setVisible(true);
+                    }
+                } else {
+                    suaNV(user, password, chucVu, tenNV, sdt, email);
+                    JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
+                    layData();
+                }
             }
         }
     }//GEN-LAST:event_jButton_SuaActionPerformed
 
     private void jButton_LamLaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LamLaiActionPerformed
-        jTextField_TenDN.setText("");
-        jTextField_MK.setText("");
-        jTextField_TenNV.setText("");
-        jTextField_SDT.setText("");
-        jTextField_Email.setText("");
-        jComboBox_ChucVu.setSelectedItem("Nhân viên");
+        lamLai();
     }//GEN-LAST:event_jButton_LamLaiActionPerformed
 
     private void jTable_DSNhanVienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_DSNhanVienMouseClicked
         DefaultTableModel dtm = (DefaultTableModel) jTable_DSNhanVien.getModel();
         int i = jTable_DSNhanVien.getSelectedRow();
 
+        if (dtm.getValueAt(i, 6).toString().equals("admin")) { //khong duoc sua 1 vai thuoc tinh cua admin
+            jTextField_TenDN.setEnabled(false);
+            jTextField_MK.setEnabled(false);
+            jComboBox_ChucVu.setEnabled(false);
+        } else {
+            jTextField_TenDN.setEnabled(true);
+            jTextField_MK.setEnabled(true);
+            jComboBox_ChucVu.setEnabled(true);
+        }
+
+        if (dtm.getValueAt(i, 4).toString().equals(username)) { //khong the sua mk tk cua minh
+            jTextField_MK.setEnabled(false);
+        } else if (dtm.getValueAt(i, 6).toString().equals("admin") == false) {
+            jTextField_MK.setEnabled(true);
+        }
         jTextField_TenNV.setText(dtm.getValueAt(i, 1).toString());
         jTextField_SDT.setText(dtm.getValueAt(i, 2).toString());
         jTextField_Email.setText(dtm.getValueAt(i, 3).toString());
         jTextField_TenDN.setText(dtm.getValueAt(i, 4).toString());
         jTextField_MK.setText(dtm.getValueAt(i, 5).toString());
         jComboBox_ChucVu.setSelectedItem(dtm.getValueAt(i, 6));
+        userCanSua = dtm.getValueAt(i, 4).toString();
     }//GEN-LAST:event_jTable_DSNhanVienMouseClicked
 
 

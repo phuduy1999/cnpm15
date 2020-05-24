@@ -426,6 +426,7 @@ public class ProductJPanel extends javax.swing.JPanel {
 
         jBtnXuatHoaDon.setBackground(new java.awt.Color(0, 0, 0));
         jBtnXuatHoaDon.setForeground(new java.awt.Color(255, 153, 153));
+        jBtnXuatHoaDon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/bill (1).png"))); // NOI18N
         jBtnXuatHoaDon.setText("Xuất Hóa Đơn");
         jBtnXuatHoaDon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
         jBtnXuatHoaDon.addActionListener(new java.awt.event.ActionListener() {
@@ -436,6 +437,7 @@ public class ProductJPanel extends javax.swing.JPanel {
 
         jBtnLuuHoaDon.setBackground(new java.awt.Color(0, 0, 0));
         jBtnLuuHoaDon.setForeground(new java.awt.Color(255, 153, 153));
+        jBtnLuuHoaDon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/money (1).png"))); // NOI18N
         jBtnLuuHoaDon.setText("Thanh Toán");
         jBtnLuuHoaDon.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
         jBtnLuuHoaDon.addActionListener(new java.awt.event.ActionListener() {
@@ -477,7 +479,7 @@ public class ProductJPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -497,8 +499,7 @@ public class ProductJPanel extends javax.swing.JPanel {
                         .addGap(43, 43, 43)
                         .addComponent(jBtnLuuHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBtnXuatHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)))
+                        .addComponent(jBtnXuatHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -682,7 +683,7 @@ public class ProductJPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -894,6 +895,7 @@ public class ProductJPanel extends javax.swing.JPanel {
 
     private void jButton_XoaGHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XoaGHActionPerformed
         String maSP=txtMaSP.getText();
+        if(maSP.equals("")) return;
         int size=Integer.parseInt(jcbSize.getSelectedItem().toString());
         for(ProductInCart x:cart){
             if(x.getMaSP().equals(maSP)&&x.getSize()==size){

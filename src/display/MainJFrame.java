@@ -52,7 +52,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jlbBaoCao = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jpnView = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        jButton_DoiMK = new javax.swing.JButton();
         jButton_DX = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -273,14 +273,14 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 153, 153));
-        jButton1.setText("Đổi mật khẩu");
-        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_DoiMK.setBackground(new java.awt.Color(0, 0, 0));
+        jButton_DoiMK.setFont(new java.awt.Font("Arial", 1, 11)); // NOI18N
+        jButton_DoiMK.setForeground(new java.awt.Color(255, 153, 153));
+        jButton_DoiMK.setText("Đổi mật khẩu");
+        jButton_DoiMK.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
+        jButton_DoiMK.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_DoiMKActionPerformed(evt);
             }
         });
 
@@ -304,7 +304,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jpnRootLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 741, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_DoiMK, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton_DX, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(70, 70, 70))
@@ -318,7 +318,7 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton_DX, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton_DoiMK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jpnView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jpnMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -338,11 +338,11 @@ public class MainJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton_DoiMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DoiMKActionPerformed
         // TODO add your handling code here:
         changePassword viewChangePassword = new changePassword(this.username);
         viewChangePassword.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButton_DoiMKActionPerformed
 
     private void jButton_DXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DXActionPerformed
         Object[] options = {"Đồng ý", "Hủy"};
@@ -359,8 +359,8 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton_DXActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_DX;
+    private javax.swing.JButton jButton_DoiMK;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel5;

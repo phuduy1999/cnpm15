@@ -96,9 +96,9 @@ where
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="-1" width="555" height="67" uuid="f36947bf-a90f-4679-92bd-3bd28cb6a58d"/>
-				<textElement textAlignment="Center">
-					<font fontName="Arial" isBold="true"/>
+				<reportElement x="0" y="0" width="555" height="67" uuid="f36947bf-a90f-4679-92bd-3bd28cb6a58d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[BÁO CÁO SỐ LƯỢNG]]></text>
 			</staticText>

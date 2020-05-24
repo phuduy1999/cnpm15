@@ -45,11 +45,12 @@ public class Login extends javax.swing.JFrame {
         rememberMe();
     }
 
-    public Login(boolean doiMK) {
+    public Login(boolean dangXuat) {
         initComponents();
         loadImage();
         rememberMe();
-        if (doiMK == true) {
+        if (dangXuat == true) {
+            txtTenDangNhap.setText("");
             txtMatKhau.setText("");
         }
     }

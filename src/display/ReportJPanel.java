@@ -37,14 +37,10 @@ public class ReportJPanel extends javax.swing.JPanel {
      */
     private JPanel childrenJPanel;
 
-    public ReportJPanel() {
-        initComponents();
-        this.showJPanel(new ShowAccount());
-    }
-
     public ReportJPanel(String user) {
         initComponents();
-        this.showJPanel(new ShowAccount());
+        username=user;
+        this.showJPanel(new ShowAccount(username));
         username = user;
     }
     

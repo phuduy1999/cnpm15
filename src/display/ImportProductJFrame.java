@@ -949,6 +949,10 @@ public class ImportProductJFrame extends javax.swing.JFrame {
             }
         }
         /////////////////////////////////////////////////////////////////////////
+        ////////////////////Làm mới ArrayList///////////////////////////////////
+        listProducts.clear();
+        loadChiTietPhieuNhapKhiThem();
+        /////////////////////////////////////////////////////////////////////////
         loadDataPhieuNhap();
         }else{
             JOptionPane.showMessageDialog(this, "Phiếu nhập hiện đang rỗng, xin vui lòng nhập sản phẩm mới cho phiếu nhập");
