@@ -1,9 +1,8 @@
 package display;
 
-import Controller.ChangeView;
-import category.Category;
+import Controller.ChuyenManHinh;
+import category.DanhMuc;
 import java.util.*;
-import display.changePassword;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,20 +17,20 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         this.username = user;
         setTitle("Phần mềm quản lý shop giày dép");
-        ChangeView controller = new ChangeView(jpnView, username);
-        controller.setView(jpnTrangChu, jlbTrangChu);
-        
-        List<category.Category> listItem = new ArrayList<>();
-        listItem.add(new Category("TrangChu", jpnTrangChu, jlbTrangChu));
-        listItem.add(new Category("SanPham", jpnSanPham, jlbSanPham));
-        listItem.add(new Category("Kho", jpnKho, jlbKho));
-        listItem.add(new Category("KhachHang", jpnKhachHang, jlbKhachHang));
-        listItem.add(new Category("BaoCao", jpnBaoCao, jlbBaoCao));
-        
-        controller.setEvent(listItem);
+        ChuyenManHinh dieuKhien = new ChuyenManHinh(jpnView, username);
+        dieuKhien.setView(jpnTrangChu, jlbTrangChu);
+
+        List<category.DanhMuc> listItem = new ArrayList<>();
+        listItem.add(new DanhMuc("TrangChu", jpnTrangChu, jlbTrangChu));
+        listItem.add(new DanhMuc("SanPham", jpnSanPham, jlbSanPham));
+        listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
+        listItem.add(new DanhMuc("KhachHang", jpnKhachHang, jlbKhachHang));
+        listItem.add(new DanhMuc("BaoCao", jpnBaoCao, jlbBaoCao));
+
+        dieuKhien.setEvent(listItem);
     }
 
-    //changePassword viewChangePassword = new changePassword();
+    //changePassword viewChangePassword = new DoiMatKhau();
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -39,7 +38,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnRoot = new javax.swing.JPanel();
         jpnMenu = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        jLabel_QLGD = new javax.swing.JLabel();
         jpnTrangChu = new javax.swing.JPanel();
         jlbTrangChu = new javax.swing.JLabel();
         jpnSanPham = new javax.swing.JPanel();
@@ -64,12 +63,12 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(255, 153, 153));
 
-        jLabel1.setBackground(new java.awt.Color(255, 153, 153));
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/run.png"))); // NOI18N
-        jLabel1.setText("QUẢN LÝ SHOP GIÀY DÉP");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel_QLGD.setBackground(new java.awt.Color(255, 153, 153));
+        jLabel_QLGD.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jLabel_QLGD.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_QLGD.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/run.png"))); // NOI18N
+        jLabel_QLGD.setText("QUẢN LÝ SHOP GIÀY DÉP");
+        jLabel_QLGD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -77,14 +76,14 @@ public class MainJFrame extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel_QLGD, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addGap(0, 30, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel_QLGD, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jpnTrangChu.setBackground(new java.awt.Color(102, 255, 204));
@@ -340,29 +339,28 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void jButton_DoiMKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DoiMKActionPerformed
         // TODO add your handling code here:
-        changePassword viewChangePassword = new changePassword(this.username);
-        viewChangePassword.setVisible(true);
+        new DoiMatKhau(this.username).setVisible(true);
     }//GEN-LAST:event_jButton_DoiMKActionPerformed
 
     private void jButton_DXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_DXActionPerformed
         Object[] options = {"Đồng ý", "Hủy"};
         int i = JOptionPane.showOptionDialog(this, "Bạn chắc chắn muốn đăng xuất?",
-                 "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         if (i == JOptionPane.YES_OPTION) {
             this.dispose();
-            Login loginFrame = new Login(true);
-            loginFrame.setTitle("Đăng Nhập Hệ Thống");
-            loginFrame.setResizable(false);
-            loginFrame.setLocationRelativeTo(null);
-            loginFrame.setVisible(true);
+            DangNhap dangNhap = new DangNhap(true);
+            dangNhap.setTitle("Đăng Nhập Hệ Thống");
+            dangNhap.setResizable(false);
+            dangNhap.setLocationRelativeTo(null);
+            dangNhap.setVisible(true);
         }
     }//GEN-LAST:event_jButton_DXActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_DX;
     private javax.swing.JButton jButton_DoiMK;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel_QLGD;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel jlbBaoCao;
     private javax.swing.JLabel jlbKhachHang;

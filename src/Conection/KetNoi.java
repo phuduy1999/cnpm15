@@ -16,19 +16,19 @@ import java.sql.SQLException;
 public class KetNoi {
 
     public static Connection layKetNoi() {
-        Connection conn = null;
+        Connection ketNoi = null;
         String uRL = "jdbc:sqlserver://localhost;databaseName=QLGIAYDEP";
         String userName = "sa";
         String password = "123";
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            conn = DriverManager.getConnection(uRL, userName, password);
-            if (conn != null) {
+            ketNoi = DriverManager.getConnection(uRL, userName, password);
+            if (ketNoi != null) {
                 System.out.println("Da ket noi");
             }
-        } catch(ClassNotFoundException | SQLException e){
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Khong ket noi duoc CSDL");
         }
-        return conn;
+        return ketNoi;
     }
 }
