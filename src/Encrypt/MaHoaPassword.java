@@ -6,8 +6,8 @@
 package Encrypt;
 
 import java.io.UnsupportedEncodingException;
-
 import java.util.Base64;
+
 /**
  *
  * @author Administrator
@@ -31,7 +31,7 @@ public class MaHoaPassword {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String text = "456";
+        String text = "matkhau";
 
         System.out.println("Text before encode: " + text);
 
