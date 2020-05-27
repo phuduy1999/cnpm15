@@ -17,7 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
+import Encrypt.MaHoaPassword;
+import java.io.UnsupportedEncodingException;
 /**
  *
  * @author User
@@ -52,7 +53,10 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                 vt.add(rs.getString("PHONE"));
                 vt.add(rs.getString("EMAIL"));
                 vt.add(rs.getString("USERNAME"));
-                vt.add(rs.getString("PASSWORD"));
+                if(layQuyen(rs.getString("USERNAME")).equals("admin")){
+                    vt.add(rs.getString("PASSWORD")); //ko hien matkhau admin
+                }
+                else vt.add(MaHoaPassword.decodeString(rs.getString("PASSWORD")));
                 vt.add(rs.getString("AUTHORIZE"));
                 vt.add(rs.getBoolean("TRANGTHAI"));
                 dtm.addRow(vt);
@@ -62,6 +66,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             ps.close();
             ketNoi.close();
         } catch (SQLException ex) {
+            Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -174,12 +180,14 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql2);
             ps.setString(1, user);
-            ps.setString(2, password);
+            ps.setString(2, MaHoaPassword.encodeString(password));
             ps.setString(3, chucVu);
             ps.setInt(4, 1);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql1);
@@ -222,12 +230,14 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql1);
             ps.setString(1, user); //ten user moi
-            ps.setString(2, password);
+            ps.setString(2, MaHoaPassword.encodeString(password));
             ps.setString(3, chucVu);
             ps.setString(4, userCanSua); //dc luu lai khi click 1 dong table
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql2);

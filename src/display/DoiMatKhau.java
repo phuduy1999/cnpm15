@@ -13,7 +13,8 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
+import Encrypt.MaHoaPassword;
+import java.io.UnsupportedEncodingException;
 /**
  *
  * @author Admin
@@ -39,7 +40,7 @@ public class DoiMatKhau extends javax.swing.JFrame {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                if(!rs.getString(2).equals(oldPassword)){
+                if(!MaHoaPassword.decodeString(rs.getString(2)).equals(oldPassword)){
                     JOptionPane.showMessageDialog(this, "Mật khẩu cũ không chính xác!");
                     result = 1;
                 }
@@ -49,6 +50,8 @@ public class DoiMatKhau extends javax.swing.JFrame {
             ketNoi.close();
         } catch (SQLException ex) {
             Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(DoiMatKhau.class.getName()).log(Level.SEVERE, null, ex);
         }
         return result;
     }
@@ -58,13 +61,16 @@ public class DoiMatKhau extends javax.swing.JFrame {
         String sql = "update ACCOUNT set PASSWORD = ? where USERNAME=?";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
-            ps.setString(1, newPassword);
+            String passEncode=MaHoaPassword.encodeString(newPassword);
+            ps.setString(1, passEncode);
             ps.setString(2, username);
             ps.executeUpdate();
             ps.close();
             ketNoi.close();
         } catch (SQLException ex) {
             Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(DoiMatKhau.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }

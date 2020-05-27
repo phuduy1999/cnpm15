@@ -24,8 +24,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.Timer;
-
+import Encrypt.MaHoaPassword;
+import java.io.UnsupportedEncodingException;
 /**
  *
  * @author User
@@ -75,7 +77,7 @@ public class DangNhap extends javax.swing.JFrame {
         }
     }
 
-    private void dangNhap() {
+    private void dangNhap(){
         int check = 0;
         String username = jTextFieldRound_TenDangNhap.getText();
         char[] pass = jPasswordFieldRound_MatKhau.getPassword();
@@ -95,7 +97,7 @@ public class DangNhap extends javax.swing.JFrame {
             try {
                 PreparedStatement ps = ketNoi.prepareStatement(sql);
                 ps.setString(1, username);
-                ps.setString(2, password);
+                ps.setString(2, MaHoaPassword.encodeString(password));
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     if(rs.getBoolean("TRANGTHAI")==false){
@@ -114,6 +116,7 @@ public class DangNhap extends javax.swing.JFrame {
                     }
                     MainJFrame MJFrame = new MainJFrame(username);
                     MJFrame.setTitle("Quản Lý Shop Giày Dép");
+                    MJFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                     MJFrame.setVisible(true);
                     preferences.put("username", username);
                     preferences.put("password", password);
@@ -122,6 +125,8 @@ public class DangNhap extends javax.swing.JFrame {
                 ps.close();
                 ketNoi.close();
             } catch (SQLException ex) {
+                Logger.getLogger(DangNhap.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (UnsupportedEncodingException ex) {
                 Logger.getLogger(DangNhap.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
