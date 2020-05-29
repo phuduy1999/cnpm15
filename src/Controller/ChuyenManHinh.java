@@ -32,6 +32,11 @@ public class ChuyenManHinh {
 
     private JPanel root;
     private String kindSelected = "";
+    private JPanel hoaDon;
+    private JPanel kho;
+    private JPanel kho2;
+    private JPanel khachHang;
+    private JPanel baoCao;
 
     private List<DanhMuc> listItem = null;
 
@@ -39,9 +44,14 @@ public class ChuyenManHinh {
         this.root = root;
     }
 
-    public ChuyenManHinh(JPanel root, String user) {
+    public ChuyenManHinh(JPanel root, String user) throws SQLException {
         this.root = root;
         username = user;
+        hoaDon = new HoaDonJPanel(username);
+        khachHang = new KhachHangJPanel(username);
+        baoCao = new BaoCaoJPanel(username);
+        kho = new KhoJPanel(username);
+        kho2 = new KhoJPanel(username, layQuyen());
     }
 
     private String layQuyen() {
@@ -102,62 +112,58 @@ public class ChuyenManHinh {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            try {
-                String q = layQuyen();
-                switch (kind) {
-                    case "TrangChu":
-                        node = new TrangChuJPanel();
-                        break;
-                    case "SanPham":
-                        if (q.equalsIgnoreCase("boss")) {
-                            JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
-                            setChangeBackGround(kind);
-                            return;
-                        } else {
-                            node = new HoaDonJPanel(username);
-                        }
-                        break;
-                    case "Kho":
-                        if (q.equalsIgnoreCase("boss")) {
-                            JOptionPane.showMessageDialog(root, "Với quyền truy cập này bạn chỉ có thể tra cứu số lượng tồn "
-                                    + "và lập báo cáo");
-                            node = new KhoJPanel(username, q);
-                        } else if (q.equalsIgnoreCase("admin")) {
-                            node = new KhoJPanel(username, q);
-                        } else {
-                            node = new KhoJPanel(username);
-                        }
-                        break;
-                    case "KhachHang":
-                        if (q.equalsIgnoreCase("boss")) {
-                            JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
-                            setChangeBackGround(kind);
-                            return;
-                        } else {
-                            node = new KhachHangJPanel(username);
-                        }
-                        break;
-                    case "BaoCao":
-                        if (q.equalsIgnoreCase("Nhân viên")) {
-                            JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
-                            setChangeBackGround(kind);
-                            return;
-                        } else {
-                            node = new BaoCaoJPanel(username);
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                root.removeAll();
-                root.setLayout(new BorderLayout());
-                root.add(node);
-                root.validate();
-                root.repaint();
-                setChangeBackGround(kind);
-            } catch (SQLException ex) {
-                Logger.getLogger(ChuyenManHinh.class.getName()).log(Level.SEVERE, null, ex);
+            String q = layQuyen();
+            switch (kind) {
+                case "TrangChu":
+                    node = new TrangChuJPanel();
+                    break;
+                case "SanPham":
+                    if (q.equalsIgnoreCase("boss")) {
+                        JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
+                        setChangeBackGround(kind);
+                        return;
+                    } else {
+                        node = hoaDon;
+                    }
+                    break;
+                case "Kho":
+                    if (q.equalsIgnoreCase("boss")) {
+                        JOptionPane.showMessageDialog(root, "Với quyền truy cập này bạn chỉ có thể tra cứu số lượng tồn "
+                                + "và lập báo cáo");
+                        node = kho2;
+                    } else if (q.equalsIgnoreCase("admin")) {
+                        node = kho2;
+                    } else {
+                        node = kho;
+                    }
+                    break;
+                case "KhachHang":
+                    if (q.equalsIgnoreCase("boss")) {
+                        JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
+                        setChangeBackGround(kind);
+                        return;
+                    } else {
+                        node = khachHang;
+                    }
+                    break;
+                case "BaoCao":
+                    if (q.equalsIgnoreCase("Nhân viên")) {
+                        JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
+                        setChangeBackGround(kind);
+                        return;
+                    } else {
+                        node = baoCao;
+                    }
+                    break;
+                default:
+                    break;
             }
+            root.removeAll();
+            root.setLayout(new BorderLayout());
+            root.add(node);
+            root.validate();
+            root.repaint();
+            setChangeBackGround(kind);
         }
 
         @Override

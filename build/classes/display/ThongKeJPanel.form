@@ -82,8 +82,16 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
     </Container>
     <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser_TuNgay">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="try {&#xa;    UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));&#xa;} catch (UnsupportedLookAndFeelException e) {&#xa;    e.printStackTrace();&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="try {&#xa;        UIManager.setLookAndFeel(&quot;com.sun.java.swing.plaf.windows.WindowsLookAndFeel&quot;);&#xa;    } catch (UnsupportedLookAndFeelException ex) {&#xa;    } catch (ClassNotFoundException ex) {&#xa;    } catch (InstantiationException ex) {&#xa;    } catch (IllegalAccessException ex) {&#xa;    }"/>
+      </AuxValues>
     </Component>
     <Component class="com.toedter.calendar.JDateChooser" name="jDateChooser_DenNgay">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="try {&#xa;    UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));&#xa;} catch (UnsupportedLookAndFeelException e) {&#xa;    e.printStackTrace();&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value="try {&#xa;        UIManager.setLookAndFeel(&quot;com.sun.java.swing.plaf.windows.WindowsLookAndFeel&quot;);&#xa;    } catch (UnsupportedLookAndFeelException ex) {&#xa;    } catch (ClassNotFoundException ex) {&#xa;    } catch (InstantiationException ex) {&#xa;    } catch (IllegalAccessException ex) {&#xa;    }"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="jButton_XacNhan">
       <Properties>

@@ -36,11 +36,15 @@ public class BaoCaoJPanel extends javax.swing.JPanel {
      * Creates new form BaoCaoJPanel
      */
     private JPanel childrenJPanel;
+    private JPanel nhanVien;
+    private JPanel thongKe;
 
     public BaoCaoJPanel(String user) {
         initComponents();
         username=user;
-        this.HienJPanel(new NhanVienJPanel(username));
+        nhanVien=new NhanVienJPanel(username);
+        thongKe=new ThongKeJPanel(username);
+        this.HienJPanel(nhanVien);
     }
     
     private void HienJPanel(JPanel panel) {
@@ -48,6 +52,7 @@ public class BaoCaoJPanel extends javax.swing.JPanel {
         jPanel_DoiKhung.removeAll();
         jPanel_DoiKhung.add(childrenJPanel);
         jPanel_DoiKhung.validate();
+        jPanel_DoiKhung.repaint();
     }
 
     /**
@@ -113,11 +118,11 @@ public class BaoCaoJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_XemNhanVienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XemNhanVienActionPerformed
-        this.HienJPanel(new NhanVienJPanel(username));
+        this.HienJPanel(nhanVien);
     }//GEN-LAST:event_jButton_XemNhanVienActionPerformed
 
     private void jButton_XemThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XemThongKeActionPerformed
-        this.HienJPanel(new ThongKeJPanel(username));
+        this.HienJPanel(thongKe);
     }//GEN-LAST:event_jButton_XemThongKeActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -2,8 +2,12 @@ package display;
 
 import Controller.ChuyenManHinh;
 import category.DanhMuc;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -13,9 +17,10 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private String username;
 
-    public MainJFrame(String user) {
+    public MainJFrame(String user) throws SQLException {
         initComponents();
         this.username = user;
+        jTextFieldRound_user.setText(username);
         setTitle("Phần mềm quản lý shop giày dép");
         ChuyenManHinh dieuKhien = new ChuyenManHinh(jpnView, username);
         dieuKhien.setView(jpnTrangChu, jlbTrangChu);
@@ -53,6 +58,9 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnView = new javax.swing.JPanel();
         jButton_DoiMK = new javax.swing.JButton();
         jButton_DX = new javax.swing.JButton();
+        jButton_Refresh = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextFieldRound_user = new jtextfieldround.JTextFieldRound();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,6 +98,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnTrangChu.setVerifyInputWhenFocusTarget(false);
 
         jlbTrangChu.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jlbTrangChu.setForeground(new java.awt.Color(51, 51, 51));
         jlbTrangChu.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbTrangChu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/social-media.png"))); // NOI18N
         jlbTrangChu.setText("Trang chủ");
@@ -116,6 +125,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnSanPham.setVerifyInputWhenFocusTarget(false);
 
         jlbSanPham.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jlbSanPham.setForeground(new java.awt.Color(51, 51, 51));
         jlbSanPham.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbSanPham.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/online.png"))); // NOI18N
         jlbSanPham.setText("Tạo Hóa Đơn");
@@ -142,6 +152,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnKho.setVerifyInputWhenFocusTarget(false);
 
         jlbKho.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jlbKho.setForeground(new java.awt.Color(51, 51, 51));
         jlbKho.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbKho.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/buildings.png"))); // NOI18N
         jlbKho.setText("Quản lý kho");
@@ -168,6 +179,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnKhachHang.setVerifyInputWhenFocusTarget(false);
 
         jlbKhachHang.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jlbKhachHang.setForeground(new java.awt.Color(51, 51, 51));
         jlbKhachHang.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbKhachHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/seo-and-web.png"))); // NOI18N
         jlbKhachHang.setText("Khách hàng");
@@ -194,6 +206,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnBaoCao.setVerifyInputWhenFocusTarget(false);
 
         jlbBaoCao.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jlbBaoCao.setForeground(new java.awt.Color(51, 51, 51));
         jlbBaoCao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jlbBaoCao.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/monitor.png"))); // NOI18N
         jlbBaoCao.setText("Quản lý nhân viên");
@@ -265,7 +278,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jpnView.setLayout(jpnViewLayout);
         jpnViewLayout.setHorizontalGroup(
             jpnViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1107, Short.MAX_VALUE)
         );
         jpnViewLayout.setVerticalGroup(
             jpnViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,31 +307,60 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton_Refresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/image/update.png"))); // NOI18N
+        jButton_Refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_RefreshActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 153, 153));
+        jLabel1.setText("Xin chào");
+
+        jTextFieldRound_user.setEditable(false);
+        jTextFieldRound_user.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+
         javax.swing.GroupLayout jpnRootLayout = new javax.swing.GroupLayout(jpnRoot);
         jpnRoot.setLayout(jpnRootLayout);
         jpnRootLayout.setHorizontalGroup(
             jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnRootLayout.createSequentialGroup()
                 .addComponent(jpnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jpnRootLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 741, Short.MAX_VALUE)
+                        .addGap(1, 1, 1)
+                        .addComponent(jpnView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jpnRootLayout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldRound_user, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton_DoiMK, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton_DX, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(70, 70, 70))
-                    .addGroup(jpnRootLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jpnView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton_Refresh)
+                        .addGap(48, 48, 48))))
         );
         jpnRootLayout.setVerticalGroup(
             jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpnRootLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton_DX, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
-                    .addComponent(jButton_DoiMK, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpnRootLayout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton_Refresh)
+                            .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jButton_DX, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton_DoiMK, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE))))
+                    .addGroup(jpnRootLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jpnRootLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jTextFieldRound_user, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jpnView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jpnMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -356,12 +398,40 @@ public class MainJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton_DXActionPerformed
 
+    private void jButton_RefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RefreshActionPerformed
+        jTextFieldRound_user.setText(username);
+        Object[] options = {"Đồng ý", "Hủy"};
+        int i = JOptionPane.showOptionDialog(this, "Khi refresh các tiến trình đang thực hiện sẽ bị mất?",
+                "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        if (i == JOptionPane.YES_OPTION) {
+            ChuyenManHinh dieuKhien = null;
+            try {
+                dieuKhien = new ChuyenManHinh(jpnView, username);
+            } catch (SQLException ex) {
+                Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dieuKhien.setView(jpnTrangChu, jlbTrangChu);
+
+            List<category.DanhMuc> listItem = new ArrayList<>();
+            listItem.add(new DanhMuc("TrangChu", jpnTrangChu, jlbTrangChu));
+            listItem.add(new DanhMuc("SanPham", jpnSanPham, jlbSanPham));
+            listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
+            listItem.add(new DanhMuc("KhachHang", jpnKhachHang, jlbKhachHang));
+            listItem.add(new DanhMuc("BaoCao", jpnBaoCao, jlbBaoCao));
+
+            dieuKhien.setEvent(listItem);
+        }
+    }//GEN-LAST:event_jButton_RefreshActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_DX;
     private javax.swing.JButton jButton_DoiMK;
+    private javax.swing.JButton jButton_Refresh;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel_QLGD;
     private javax.swing.JPanel jPanel5;
+    private jtextfieldround.JTextFieldRound jTextFieldRound_user;
     private javax.swing.JLabel jlbBaoCao;
     private javax.swing.JLabel jlbKhachHang;
     private javax.swing.JLabel jlbKho;

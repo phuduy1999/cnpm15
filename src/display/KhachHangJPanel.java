@@ -17,6 +17,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.JMarsDarkTheme;
 import model.KhachHang;
 
 /**
@@ -218,7 +222,19 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         jTextField_TenKhachHang = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea_DiaChiKhachHang = new javax.swing.JTextArea();
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+        } catch (InstantiationException ex) {
+        } catch (IllegalAccessException ex) {
+        }
         jDateChooser_KhachHang = new com.toedter.calendar.JDateChooser();
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         jLabel_LOISDT = new javax.swing.JLabel();
         jPanel_TTKH = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -261,6 +277,8 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         jTextArea_DiaChiKhachHang.setColumns(20);
         jTextArea_DiaChiKhachHang.setRows(5);
         jScrollPane2.setViewportView(jTextArea_DiaChiKhachHang);
+
+        jDateChooser_KhachHang.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel_LOISDT.setForeground(new java.awt.Color(255, 0, 0));
         jLabel_LOISDT.setText("Sai định dạng sđt. Hãy thử lại");
@@ -354,7 +372,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             .addGroup(jPanel_TTKHLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel_TTKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
                     .addGroup(jPanel_TTKHLayout.createSequentialGroup()
                         .addGroup(jPanel_TTKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel_TTKH)
@@ -384,6 +402,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         jButton_ThemKhachHang.setBackground(new java.awt.Color(0, 0, 0));
         jButton_ThemKhachHang.setForeground(new java.awt.Color(255, 153, 153));
         jButton_ThemKhachHang.setText("Thêm khách hàng");
+        jButton_ThemKhachHang.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
         jButton_ThemKhachHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton_ThemKhachHangActionPerformed(evt);
@@ -427,13 +446,13 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             .addGroup(jPanel_ButtonXuLyLayout.createSequentialGroup()
                 .addGap(75, 75, 75)
                 .addGroup(jPanel_ButtonXuLyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton_XoaKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton_ThemKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(22, 22, 22)
+                    .addComponent(jButton_ThemKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(jButton_XoaKhachHang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel_ButtonXuLyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton_SuaKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_LamMoiKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(75, Short.MAX_VALUE))
+                    .addComponent(jButton_LamMoiKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_SuaKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
         jPanel_ButtonXuLyLayout.setVerticalGroup(
             jPanel_ButtonXuLyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

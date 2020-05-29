@@ -71,19 +71,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jLabel_SIZE" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="jLabel_SL" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="jLabel_MaSP" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jLabel_MaPN" min="-2" pref="98" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                              </Group>
+                              <Component id="jLabel_SIZE" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jLabel_SL" alignment="1" max="32767" attributes="0"/>
+                              <Component id="jLabel_MaSP" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jLabel_MaPN" max="32767" attributes="0"/>
                           </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jTextField_MaPhieuNhap" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
@@ -112,17 +105,17 @@
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="39" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel_NgayNhap" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="jLabel_NVNhap" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                              <Component id="jLabel_NgayNhap" max="32767" attributes="0"/>
+                              <Component id="jLabel_NVNhap" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jTextField_NhanVien" max="32767" attributes="0"/>
-                              <Component id="jDateChooser_NgayNhapHang" max="32767" attributes="0"/>
+                              <Component id="jDateChooser_NgayNhapHang" pref="174" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

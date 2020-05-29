@@ -17,6 +17,10 @@ import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.JMarsDarkTheme;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -90,8 +94,8 @@ public class ThongKeJPanel extends javax.swing.JPanel {
         }
         return result;
     }
-    
-    private void xuatBaoCaoDoanhThu(String date1,String date2) {
+
+    private void xuatBaoCaoDoanhThu(String date1, String date2) {
         Connection ketNoi = KetNoi.layKetNoi();
         Hashtable map = new Hashtable();
         try {
@@ -115,8 +119,32 @@ public class ThongKeJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel_BieuDo = new javax.swing.JPanel();
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+        } catch (InstantiationException ex) {
+        } catch (IllegalAccessException ex) {
+        }
         jDateChooser_TuNgay = new com.toedter.calendar.JDateChooser();
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+        try {
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+        } catch (UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException ex) {
+        } catch (InstantiationException ex) {
+        } catch (IllegalAccessException ex) {
+        }
         jDateChooser_DenNgay = new com.toedter.calendar.JDateChooser();
+        try {
+            UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
         jButton_XacNhan = new javax.swing.JButton();
         jLabel_TuNgay = new javax.swing.JLabel();
         jLabel_DenNgay = new javax.swing.JLabel();
