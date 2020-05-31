@@ -18,7 +18,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableModel;
+import mdlaf.MaterialLookAndFeel;
+import mdlaf.themes.JMarsDarkTheme;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -41,12 +45,12 @@ public class BaoCaoJPanel extends javax.swing.JPanel {
 
     public BaoCaoJPanel(String user) {
         initComponents();
-        username=user;
-        nhanVien=new NhanVienJPanel(username);
-        thongKe=new ThongKeJPanel(username);
+        username = user;
+        nhanVien = new NhanVienJPanel(username);
+        thongKe = new ThongKeJPanel(username);
         this.HienJPanel(nhanVien);
     }
-    
+
     private void HienJPanel(JPanel panel) {
         childrenJPanel = panel;
         jPanel_DoiKhung.removeAll();
@@ -124,7 +128,7 @@ public class BaoCaoJPanel extends javax.swing.JPanel {
     private void jButton_XemThongKeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XemThongKeActionPerformed
         this.HienJPanel(thongKe);
     }//GEN-LAST:event_jButton_XemThongKeActionPerformed
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_XemNhanVien;
     private javax.swing.JButton jButton_XemThongKe;

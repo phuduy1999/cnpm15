@@ -69,6 +69,7 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
                     if (jTable_DSLoai.getSelectedRow() >= 0) {
                         textField_MaLoai.setText(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 1) + "");
                         textField_TenLoai.setText(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 2) + "");
+                        textField_MaLoai.setEnabled(false);
                     }
                 }
             });
@@ -297,13 +298,15 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String maLoai = textField_MaLoai.getText();
         String tenLoai = textField_TenLoai.getText();
-
+        String regexTen = "^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ\\s]+$";
         if (maLoai.contains(" ") == true) {
             JOptionPane.showMessageDialog(this, "Mã sản phẩm không được chứa khoảng trắng");
         } else if (maLoai.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập mã loại");
         } else if (tenLoai.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên loại");
+        } else if (tenLoai.matches(regexTen) == false) {
+            JOptionPane.showMessageDialog(this, "Tên loại không chứa ký tự số!");
         } else {
             if (checkMaLoaiThem(maLoai) == 1) {
                 JOptionPane.showMessageDialog(this, "Mã loại " + maLoai + " đã tồn tại!");
@@ -311,6 +314,8 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
                 ThemLoai();
                 JOptionPane.showMessageDialog(this, "Thêm thành công");
                 loadData();
+                textField_MaLoai.setText("");
+                textField_TenLoai.setText("");
             }
         }
     }//GEN-LAST:event_jButton_themActionPerformed
@@ -319,20 +324,30 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String maLoai = textField_MaLoai.getText();
         String tenLoai = textField_TenLoai.getText();
-
-        if (maLoai.contains(" ") == true) {
-            JOptionPane.showMessageDialog(this, "Mã sản phẩm không được chứa khoảng trắng");
-        } else if (maLoai.equals("")) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã loại");
-        } else if (tenLoai.equals("")) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập tên loại");
-        } else if (textField_MaLoai.getText().equals(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 1).toString())
-                & textField_TenLoai.getText().equals(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 2).toString())) {
-            JOptionPane.showMessageDialog(this, "Bạn chưa sửa gì cả!!");
-        } else {
-            SuaLoai(maLoai, tenLoai);
-            JOptionPane.showMessageDialog(this, "Sửa thành công");
-            loadData();
+        String regexTen = "^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ\\s]+$";
+        try {
+            if (maLoai.contains(" ") == true) {
+                JOptionPane.showMessageDialog(this, "Mã sản phẩm không được chứa khoảng trắng");
+            } else if (maLoai.equals("")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mã loại");
+            } else if (tenLoai.equals("")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên loại");
+            } else if (tenLoai.matches(regexTen) == false) {
+                JOptionPane.showMessageDialog(this, "Tên loại không chứa ký tự số!");
+            } else {
+                if (textField_MaLoai.getText().equals(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 1).toString())
+                        && textField_TenLoai.getText().equals(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 2).toString())) {
+                    JOptionPane.showMessageDialog(this, "Bạn chưa sửa gì cả!!");
+                } else if (!textField_MaLoai.getText().equals(jTable_DSLoai.getValueAt(jTable_DSLoai.getSelectedRow(), 1).toString())) {
+                    JOptionPane.showMessageDialog(this, "Mã sản phẩm không thể sửa");
+                } else {
+                    SuaLoai(maLoai, tenLoai);
+                    JOptionPane.showMessageDialog(this, "Sửa thành công");
+                    loadData();
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn loại cần sửa từ danh sách");
         }
     }//GEN-LAST:event_jButton_suaActionPerformed
 
@@ -371,6 +386,7 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         textField_MaLoai.setText("");
         textField_TenLoai.setText("");
+        textField_MaLoai.setEnabled(true);
     }//GEN-LAST:event_jButton_lamlaiActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -66,6 +66,8 @@ public class KhoJPanel extends javax.swing.JPanel {
             jButton_ThemSanPham.setEnabled(false);
             jButton_XoaSanPham.setEnabled(false);
             jButton_XuatBaoCao.setEnabled(true);
+            jButton_RF.setEnabled(false);
+            jButton_QLLOAI.setEnabled(false);
         }
         loadData();
         jTextField_SoLuong.setEnabled(false);
@@ -106,7 +108,13 @@ public class KhoJPanel extends javax.swing.JPanel {
             ResultSet rs = ps.executeQuery();
             //storeHouseList.clear();
             Object[] obj = new Object[]{"STT", "Mã Sản phẩm", "Tên Sản phẩm", "Đơn giá", "Số lượng", "Size", "Loại", "Trạng thái"};
-            tbn = new DefaultTableModel(obj, 0);
+            tbn = new DefaultTableModel(obj, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    //all cells false
+                    return false;
+                }
+            };
             jTable_DanhSachSP.setModel(tbn);
             int c = 0;
             try {
@@ -284,9 +292,11 @@ public class KhoJPanel extends javax.swing.JPanel {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 c = true;//da duoc ban
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(KhoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KhoJPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return c;
     }
@@ -302,9 +312,11 @@ public class KhoJPanel extends javax.swing.JPanel {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 c = true;//co trong chitietgd
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(KhoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KhoJPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         return c;
     }
@@ -315,8 +327,10 @@ public class KhoJPanel extends javax.swing.JPanel {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
             ps.setString(1, maSP);
             ps.executeUpdate();
+
         } catch (SQLException ex) {
-            Logger.getLogger(KhoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KhoJPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -330,8 +344,10 @@ public class KhoJPanel extends javax.swing.JPanel {
             ps.setString(1, maSP);
             ps.setString(2, size);
             ps.executeUpdate();
+
         } catch (SQLException ex) {
-            Logger.getLogger(KhoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KhoJPanel.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -821,8 +837,7 @@ public class KhoJPanel extends javax.swing.JPanel {
                         loadData();
                         JOptionPane.showMessageDialog(this, "Xóa thành công");
                     }
-                }
-                else{
+                } else {
                     JOptionPane.showMessageDialog(this, "Không tồn tại sản phẩm trên!");
                 }
             }
@@ -890,7 +905,7 @@ public class KhoJPanel extends javax.swing.JPanel {
                     }
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Đơn giá chỉ nhận kí tự số");
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm cần sửa từ danh sách");
             }
         }
     }//GEN-LAST:event_jButton_SuaSanPhamActionPerformed

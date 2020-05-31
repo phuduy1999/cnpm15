@@ -7,6 +7,7 @@ package display;
 
 import Conection.KetNoi;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -233,7 +234,19 @@ public class ThongKeJPanel extends javax.swing.JPanel {
         if (result == 0) {
             String date1 = sdf.format(jDateChooser_TuNgay.getDate());
             String date2 = sdf.format(jDateChooser_DenNgay.getDate());
+            try {
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            } catch (UnsupportedLookAndFeelException ex) {
+            } catch (ClassNotFoundException ex) {
+            } catch (InstantiationException ex) {
+            } catch (IllegalAccessException ex) {
+            }
             this.addChart(date1, date2);
+            try {
+                UIManager.setLookAndFeel(new MaterialLookAndFeel(new JMarsDarkTheme()));
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
         }
     }//GEN-LAST:event_jButton_XacNhanActionPerformed
 

@@ -115,13 +115,17 @@ public class DoiMatKhau extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 204));
 
         jLabel_DoiMK.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel_DoiMK.setForeground(new java.awt.Color(51, 51, 51));
         jLabel_DoiMK.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel_DoiMK.setText("Đổi mật khẩu");
 
+        jLabel_MKcu.setForeground(new java.awt.Color(51, 51, 51));
         jLabel_MKcu.setText("Mật khẩu cũ");
 
+        jLabel_MKmoi.setForeground(new java.awt.Color(51, 51, 51));
         jLabel_MKmoi.setText("Mật khẩu mới");
 
+        jLabel_NhapLaiMK.setForeground(new java.awt.Color(51, 51, 51));
         jLabel_NhapLaiMK.setText("Nhập lại mật khẩu");
 
         jButton_XacNhan.setBackground(new java.awt.Color(0, 0, 0));

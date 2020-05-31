@@ -168,7 +168,13 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
             ResultSet rs = st.executeQuery(sql);
 
             Object[] obj = new Object[]{"STT", "Mã Phiếu nhập", "Mã Sản phẩm", "Size", "Số Lượng",};
-            DefaultTableModel tableModel = new DefaultTableModel(obj, 0);
+            DefaultTableModel tableModel = new DefaultTableModel(obj, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    //all cells false
+                    return false;
+                }
+            };
             jTable_ChiTietPhieuNhap.setModel(tableModel);
             int c = 0;
             try {
@@ -524,10 +530,7 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
 
         jTable_PhieuNhap.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Mã sản phẩm", "Tên sản phẩm", "Đơn giá", "Số lượng", "Size", "Loại", "Ngày nhập hàng"
@@ -536,9 +539,16 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(jTable_PhieuNhap);
