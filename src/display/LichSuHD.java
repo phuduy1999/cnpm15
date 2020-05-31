@@ -112,7 +112,15 @@ public class LichSuHD extends javax.swing.JFrame {
             new String [] {
                 "Mã hóa đơn", "Tổng hóa đơn", "Ngày bán", "Mã khách hàng", "Mã nhân viên"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable_DSHD.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable_DSHDMouseClicked(evt);
@@ -127,7 +135,15 @@ public class LichSuHD extends javax.swing.JFrame {
             new String [] {
                 "Mã sản phẩm", "Tên sản phẩm", "Size", "Số lượng"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(jTable_DSSP);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

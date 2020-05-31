@@ -381,6 +381,12 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
 
         jLabel_SIZE.setText("Size:");
 
+        jTextField_SoLuong.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField_SoLuongKeyReleased(evt);
+            }
+        });
+
         jComboBox_Size.setToolTipText("");
 
         jDateChooser_NgayNhapHang.setDateFormatString("yyyy-MM-dd");
@@ -668,7 +674,9 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
 
         int sizeTemp = Integer.parseInt(size);
 
-        if (maSP.equals("-Chọn Mã Sản Phẩm-")) {
+        if (soLuong.matches("\\D") == true) {
+            JOptionPane.showMessageDialog(this, "Số lượng chỉ có thể chưa kí tự số");
+        } else if (maSP.equals("-Chọn Mã Sản Phẩm-")) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn mã sản phẩm");
         } else if (soLuong.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập Số lượng");
@@ -677,12 +685,15 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
         } else if (checkChiTietPhieuNhap(maSP, sizeTemp) == 0) {
             try {
                 int soLuongTemp = Integer.parseInt(soLuong);
-                SanPham pd = new SanPham(maSP, soLuongTemp, sizeTemp);
-                danhSachSP.add(pd);
-                loadChiTietPhieuNhapKhiThem();
-
+                if (soLuongTemp <= 0) {
+                    JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn 0");
+                } else {
+                    SanPham pd = new SanPham(maSP, soLuongTemp, sizeTemp);
+                    danhSachSP.add(pd);
+                    loadChiTietPhieuNhapKhiThem();
+                }
             } catch (Exception e) {
-                System.err.println("Có lỗi tại nút thêm chi tiết phiếu nhập");
+                JOptionPane.showMessageDialog(this, "Kiểm tra lại số lượng nhập vào chỉ là số");
             }
         } else {
             JOptionPane.showMessageDialog(this, "Mã sản phẩm và size bạn vừa nhập hiện đã tồn tại!"
@@ -707,9 +718,14 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
 
             for (SanPham x : danhSachSP) {
                 if (x.getMaSP().equals(maSP) && x.getSize() == sizeTemp) {
-                    danhSachSP.remove(x);
-                    JOptionPane.showMessageDialog(this, "Xóa thành công");
-                    loadChiTietPhieuNhapKhiThem();
+                    Object[] options = {"Đồng ý", "Hủy"};
+                    int chon = JOptionPane.showOptionDialog(this, "Bạn có chắc muốn xóa sản phẩm này không?",
+                            "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                    if (chon == JOptionPane.YES_OPTION) {
+                        danhSachSP.remove(x);
+                        JOptionPane.showMessageDialog(this, "Xóa thành công");
+                        loadChiTietPhieuNhapKhiThem();
+                    }
                 }
             }
         } catch (Exception e) {
@@ -821,17 +837,30 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
         maSP = jComboBox_MaSP.getSelectedItem().toString();
         soLuong = jTextField_SoLuong.getText();
         size = jComboBox_Size.getSelectedItem().toString();
-        int soLuongTemp = Integer.parseInt(soLuong);
         int sizeTemp = Integer.parseInt(size);
-
-        for (SanPham x : danhSachSP) {
-            if (x.getMaSP().equals(maSP) && x.getSize() == sizeTemp) {
-                x.setSoLuong(soLuongTemp);
-                JOptionPane.showMessageDialog(this, "Sửa thành công");
-                loadChiTietPhieuNhapKhiThem();
-            } else {
-                JOptionPane.showMessageDialog(this, "Mã sản phẩm và size bạn muốn sửa hiện không tồn tại!");
+        if (jTable_ChiTietPhieuNhap.getRowCount() > 0) {
+            for (SanPham x : danhSachSP) {
+                if (soLuong.matches("\\D") == true) {
+                    JOptionPane.showMessageDialog(this, "Số lượng chỉ có thể chưa kí tự số");
+                } else if (x.getMaSP().equals(maSP) && x.getSize() == sizeTemp) {
+                    try {
+                        int soLuongTemp = Integer.parseInt(soLuong);
+                        if (soLuongTemp <= 0) {
+                            JOptionPane.showMessageDialog(this, "Số lượng phải lớn hơn 0");
+                        } else {
+                            x.setSoLuong(soLuongTemp);
+                            JOptionPane.showMessageDialog(this, "Sửa thành công");
+                            loadChiTietPhieuNhapKhiThem();
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Kiểm tra lại số lượng chỉ nhận kí tự số");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Mã sản phẩm và size bạn muốn sửa hiện không tồn tại!");
+                }
             }
+        } else {
+            JOptionPane.showMessageDialog(this, "Không có sản phẩm nào hiện có để sửa");
         }
     }//GEN-LAST:event_jButton_SuaGiayActionPerformed
 
@@ -883,6 +912,15 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
         jButton_LamMoiGiay.setEnabled(false);
         jButton_XuatPhieu.setEnabled(true);
     }//GEN-LAST:event_jRadioButton_XemLaiPhieuNhapActionPerformed
+
+    private void jTextField_SoLuongKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField_SoLuongKeyReleased
+        // TODO add your handling code here:
+        String t = jTextField_SoLuong.getText();
+        if (t.matches("\\D") == true) {
+            JOptionPane.showMessageDialog(this, "Số lượng chỉ có thể chưa kí tự số");
+            jTextField_SoLuong.setText("");
+        }
+    }//GEN-LAST:event_jTextField_SoLuongKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

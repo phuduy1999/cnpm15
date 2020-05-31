@@ -44,7 +44,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jLabel_QLKho" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="489" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="327" max="-2" attributes="0"/>
+                          <Component id="jButton_QLLOAI" min="-2" pref="150" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jButton_TaoPhieuNhap" min="-2" pref="157" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
@@ -64,7 +66,8 @@
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="jLabel_QLKho" max="32767" attributes="0"/>
-                      <Component id="jButton_TaoPhieuNhap" max="32767" attributes="0"/>
+                      <Component id="jButton_TaoPhieuNhap" alignment="1" max="32767" attributes="0"/>
+                      <Component id="jButton_QLLOAI" alignment="0" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -98,36 +101,9 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="jLabel_SP" min="-2" pref="182" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="164" max="-2" attributes="0"/>
-                  </Group>
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel_Loai" max="32767" attributes="0"/>
-                                  <Component id="jLabel_SIZE" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="jLabel_SL" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="jLabel_DonGia" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="jLabel_TenSP" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="jLabel_MaSP" alignment="1" min="-2" pref="149" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jTextField_SoLuong" min="-2" pref="183" max="-2" attributes="0"/>
-                                  <Component id="jTextField_DonGia" min="-2" pref="183" max="-2" attributes="0"/>
-                                  <Component id="jTextField_TenSanPham" min="-2" pref="183" max="-2" attributes="0"/>
-                                  <Component id="jTextField_MaSanPham" min="-2" pref="183" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="jComboBox_Loai" alignment="0" pref="137" max="32767" attributes="0"/>
-                                      <Component id="jComboBox_Size" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <EmptySpace pref="20" max="32767" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Component id="jButton_ThemSanPham" min="-2" pref="126" max="-2" attributes="0"/>
@@ -139,6 +115,37 @@
                                   <Component id="jButton_SuaSanPham" min="-2" pref="127" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jLabel_SP" alignment="0" min="-2" pref="182" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jLabel_Loai" min="-2" pref="101" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                              <Component id="jLabel_SIZE" max="32767" attributes="0"/>
+                                              <Component id="jLabel_SL" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jLabel_DonGia" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="jLabel_TenSP" alignment="0" pref="101" max="32767" attributes="0"/>
+                                              <Component id="jLabel_MaSP" alignment="0" max="32767" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jTextField_TenSanPham" min="-2" pref="183" max="-2" attributes="0"/>
+                                          <Component id="jTextField_MaSanPham" min="-2" pref="183" max="-2" attributes="0"/>
+                                          <Component id="jTextField_DonGia" alignment="0" min="-2" pref="183" max="-2" attributes="0"/>
+                                          <Component id="jTextField_SoLuong" alignment="0" min="-2" pref="183" max="-2" attributes="0"/>
+                                          <Component id="jComboBox_Size" alignment="0" min="-2" pref="137" max="-2" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Component id="jComboBox_Loai" min="-2" pref="137" max="-2" attributes="0"/>
+                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <Component id="jButton_RF" min="-2" pref="27" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <EmptySpace pref="54" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -175,9 +182,12 @@
                           <Component id="jLabel_SIZE" alignment="3" min="-2" pref="36" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel_Loai" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="jComboBox_Loai" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jButton_RF" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel_Loai" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="jComboBox_Loai" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -236,10 +246,16 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_MaSanPham">
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_MaSanPhamKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_TenSanPham">
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_DonGia">
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_DonGiaKeyReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField_SoLuong">
               <Properties>
@@ -367,6 +383,23 @@
                 <Property name="text" type="java.lang.String" value="Th&#xea;m m&#x1edb;i s&#x1ea3;n ph&#x1ea9;m"/>
               </Properties>
             </Component>
+            <Component class="javax.swing.JButton" name="jButton_RF">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/image/refresh (1).png"/>
+                </Property>
+                <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+                  <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                    <LineBorder>
+                      <Color PropertyName="color" blue="99" green="99" red="ff" type="rgb"/>
+                    </LineBorder>
+                  </Border>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_RFActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel_TK">
@@ -388,9 +421,9 @@
                           <Component id="jScrollPane1" pref="448" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jTextField_TimSanPham" min="-2" pref="213" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                              <Component id="jTextField_TimSanPham" min="-2" pref="201" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jButton_XuatBaoCao" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -404,22 +437,17 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTextField_TimSanPham" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
                           <Component id="jButton_XuatBaoCao" alignment="3" min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="jTextField_TimSanPham" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="355" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="jTextField_TimSanPham">
-              <Events>
-                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_TimSanPhamKeyReleased"/>
-              </Events>
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
               <AuxValues>
                 <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -471,6 +499,11 @@
                 <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m:"/>
               </Properties>
             </Component>
+            <Component class="jtextfieldround.JTextFieldRound" name="jTextField_TimSanPham">
+              <Events>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextField_TimSanPhamKeyReleased"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JButton" name="jButton_TaoPhieuNhap">
@@ -492,6 +525,24 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_TaoPhieuNhapActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButton_QLLOAI">
+          <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="99" red="ff" type="rgb"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Qu&#x1ea3;n l&#xfd; lo&#x1ea1;i"/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
+                <LineBorder>
+                  <Color PropertyName="color" blue="99" green="99" red="ff" type="rgb"/>
+                </LineBorder>
+              </Border>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_QLLOAIActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

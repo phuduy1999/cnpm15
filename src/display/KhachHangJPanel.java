@@ -291,9 +291,9 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel_TTKH2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel_NS, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_maKH, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_DC, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel_TenKH, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel_DC, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel_maKH, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel_TTKH2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField_SDTKhachHang)
@@ -336,7 +336,15 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             new String [] {
                 "SĐT", "Họ và tên", "Ngày Sinh", "Địa chỉ"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         JTable_KhachHang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JTable_KhachHangMouseClicked(evt);
@@ -372,7 +380,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             .addGroup(jPanel_TTKHLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel_TTKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                     .addGroup(jPanel_TTKHLayout.createSequentialGroup()
                         .addGroup(jPanel_TTKHLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel_TTKH)
@@ -452,7 +460,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 .addGroup(jPanel_ButtonXuLyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_LamMoiKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton_SuaKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(95, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel_ButtonXuLyLayout.setVerticalGroup(
             jPanel_ButtonXuLyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

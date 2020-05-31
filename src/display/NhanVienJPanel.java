@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Encrypt.MaHoaPassword;
 import java.io.UnsupportedEncodingException;
+
 /**
  *
  * @author User
@@ -53,10 +54,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                 vt.add(rs.getString("PHONE"));
                 vt.add(rs.getString("EMAIL"));
                 vt.add(rs.getString("USERNAME"));
-                if(layQuyen(rs.getString("USERNAME")).equals("admin")){
+                if (layQuyen(rs.getString("USERNAME")).equals("admin")) {
                     vt.add(rs.getString("PASSWORD")); //ko hien matkhau admin
+                } else {
+                    vt.add(MaHoaPassword.decodeString(rs.getString("PASSWORD")));
                 }
-                else vt.add(MaHoaPassword.decodeString(rs.getString("PASSWORD")));
                 vt.add(rs.getString("AUTHORIZE"));
                 vt.add(rs.getBoolean("TRANGTHAI"));
                 dtm.addRow(vt);
@@ -95,10 +97,10 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         int check = 0;
         if (user.equals("")) {
             check = 1;
-            JOptionPane.showMessageDialog(this, "Tên tài khoản không được bỏ trống");
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập không được bỏ trống");
         } else if (user.matches("^[a-zA-Z0-9\\._\\-]{3,}$") == false) {
             check = 1;
-            JOptionPane.showMessageDialog(this, "Tên tài khoản không đúng định dạng");
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập không đúng định dạng");
         } else if (password.equals("")) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Mật khẩu không được bỏ trống");
@@ -156,13 +158,41 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                         result = 2;
                         break;
                     }
-                    JOptionPane.showMessageDialog(this, "Tên tài khoản đã được sử dụng!");
+                    JOptionPane.showMessageDialog(this, "Tên đăng nhập đã được sử dụng!");
                 } else if (rs.getString("PHONE").equals(sdt)) {
                     JOptionPane.showMessageDialog(this, "Số điện thoại đã được sử dụng!");
                 } else if (rs.getString("EMAIL").equals(email)) {
                     JOptionPane.showMessageDialog(this, "Email đã được sử dụng!");
                 }
                 result = 1;
+            }
+            rs.close();
+            ps.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    private int checkSDTEM(String sdt, String email) {
+        Connection ketNoi = KetNoi.layKetNoi();
+        String sql = "select * from NHANVIEN where (PHONE=? or EMAIL=?)";
+        int result = 0;
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql);
+            ps.setString(1, sdt);
+            ps.setString(2, email);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                if (!rs.getString(5).equals(userCanSua)) {
+                    if (rs.getString("PHONE").equals(sdt)) {
+                        JOptionPane.showMessageDialog(this, "Số điện thoại đã được sử dụng!");
+                    } else if (rs.getString("EMAIL").equals(email)) {
+                        JOptionPane.showMessageDialog(this, "Email đã được sử dụng!");
+                    }
+                    result = 1;
+                }
             }
             rs.close();
             ps.close();
@@ -211,7 +241,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             if (!rs.next()) {
-                JOptionPane.showMessageDialog(this, "Tên tài khoản không tồn tại!");
+                JOptionPane.showMessageDialog(this, "Tên đăng nhập không tồn tại!");
                 result = 1;
             }
             rs.close();
@@ -547,7 +577,15 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             new String [] {
                 "Mã NV", "Họ Tên", "SDT", "Email", "Tên Đăng Nhập", "Mật khẩu", "Chức vụ", "Trạng thái"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable_DSNhanVien.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable_DSNhanVienMouseClicked(evt);
@@ -678,9 +716,12 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             if (username.equals("admin")) {
                 int check = checkFormAdmin(jTextField_TenNV.getText(), jTextField_SDT.getText(), jTextField_Email.getText());
                 if (check != 1) {
-                    suaAdmin(jTextField_TenNV.getText(), jTextField_SDT.getText(), jTextField_Email.getText());
-                    JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
-                    layDanhSachNV();
+                    int check3 = checkSDTEM(jTextField_SDT.getText(), jTextField_Email.getText());
+                    if (check3 != 1) {
+                        suaAdmin(jTextField_TenNV.getText(), jTextField_SDT.getText(), jTextField_Email.getText());
+                        JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
+                        layDanhSachNV();
+                    }
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Bạn không đủ quyền để sửa tài khoản admin");
@@ -695,25 +736,28 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             int check = checkForm(user, password, sdt, email, tenNV);
             int check2 = checkUsernameTonTai(userCanSua);
             if (check != 1 && check2 != 1) {
-                if (userCanSua.equals(username) && userCanSua.equals(user) == false) {//sua tk đang đăng nhập va có đổi tên đn
-                    Object[] options = {"Đồng ý", "Hủy"};
-                    int chon = JOptionPane.showOptionDialog(this, "Bạn cần đăng xuất và đăng nhập lại sau khi sửa tên đăng nhập?",
-                            "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-                    if (chon == JOptionPane.YES_OPTION) {
+                int check3 = checkSDTEM(sdt, email);
+                if (check3 != 1) {
+                    if (userCanSua.equals(username) && userCanSua.equals(user) == false) {//sua tk đang đăng nhập va có đổi tên đn
+                        Object[] options = {"Đồng ý", "Hủy"};
+                        int chon = JOptionPane.showOptionDialog(this, "Bạn cần đăng xuất và đăng nhập lại sau khi sửa tên đăng nhập?",
+                                "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                        if (chon == JOptionPane.YES_OPTION) {
+                            suaNhanVien(user, password, chucVu, tenNV, sdt, email);
+                            JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
+                            layDanhSachNV();
+                            ((Window) getRootPane().getParent()).dispose(); //đóng cửa số sau khi sửa
+                            DangNhap dangNhap = new DangNhap(true);
+                            dangNhap.setTitle("Đăng Nhập Hệ Thống");
+                            dangNhap.setResizable(false);
+                            dangNhap.setLocationRelativeTo(null);
+                            dangNhap.setVisible(true);
+                        }
+                    } else {
                         suaNhanVien(user, password, chucVu, tenNV, sdt, email);
                         JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
                         layDanhSachNV();
-                        ((Window) getRootPane().getParent()).dispose(); //đóng cửa số sau khi sửa
-                        DangNhap dangNhap = new DangNhap(true);
-                        dangNhap.setTitle("Đăng Nhập Hệ Thống");
-                        dangNhap.setResizable(false);
-                        dangNhap.setLocationRelativeTo(null);
-                        dangNhap.setVisible(true);
                     }
-                } else {
-                    suaNhanVien(user, password, chucVu, tenNV, sdt, email);
-                    JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
-                    layDanhSachNV();
                 }
             }
         }
@@ -727,7 +771,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         DefaultTableModel dtm = (DefaultTableModel) jTable_DSNhanVien.getModel();
         int i = jTable_DSNhanVien.getSelectedRow();
 
-        if (dtm.getValueAt(i, 6).toString().equals("admin")) { //khong duoc sua 1 vai thuoc tinh cua admin khoa textfeild
+        if (dtm.getValueAt(i, 4).toString().equals("admin")) { //khong duoc sua 1 vai thuoc tinh cua admin khoa textfeild
             jTextField_TenDN.setEnabled(false);
             jTextField_MK.setEnabled(false);
             jComboBox_ChucVu.setEnabled(false);

@@ -62,9 +62,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel_HDMH" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jButton_LS" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jLabel_HDMH" min="-2" pref="33" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -165,7 +165,7 @@
                           <Component id="jTextFeild_XuatHoaDon" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           <Component id="jTextFeild_ThanhTien" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="28" max="32767" attributes="0"/>
+                      <EmptySpace pref="31" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -193,12 +193,12 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="6" rowCount="0">
-                        <Column editable="true" title="STT" type="java.lang.Object"/>
-                        <Column editable="true" title="M&#xe3; s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
-                        <Column editable="true" title="T&#xea;n s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
-                        <Column editable="true" title="Size" type="java.lang.Object"/>
-                        <Column editable="true" title="&#x110;&#x1a1;n Gi&#xe1;" type="java.lang.Object"/>
-                        <Column editable="true" title="S&#x1ed1; l&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
+                        <Column editable="false" title="STT" type="java.lang.Object"/>
+                        <Column editable="false" title="M&#xe3; s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
+                        <Column editable="false" title="T&#xea;n s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
+                        <Column editable="false" title="Size" type="java.lang.Object"/>
+                        <Column editable="false" title="&#x110;&#x1a1;n Gi&#xe1;" type="java.lang.Object"/>
+                        <Column editable="false" title="S&#x1ed1; l&#x1b0;&#x1ee3;ng" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -333,11 +333,6 @@
               </Events>
             </Component>
             <Component class="jtextfieldround.JTextFieldRound" name="jTextFeild_ThanhTien">
-              <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="0" green="66" red="ff" type="rgb"/>
-                </Property>
-              </Properties>
             </Component>
             <Component class="jtextfieldround.JTextFieldRound" name="jTextField_maKH">
               <Properties>
@@ -355,7 +350,7 @@
                   <Color blue="ff" green="ff" red="ff" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/image/shopping-cart.png"/>
+                  <Image iconType="3" name="/image/cart (1).png"/>
                 </Property>
               </Properties>
               <Events>
@@ -403,15 +398,23 @@
                                       </Group>
                                   </Group>
                               </Group>
-                              <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jLabel_Size" max="32767" attributes="0"/>
-                                  <Component id="jLabel_SL" pref="57" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jComboBox_Size" min="-2" pref="110" max="-2" attributes="0"/>
-                                  <Component id="jComboBox_SoLuong" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                          <Component id="jLabel_Size" max="32767" attributes="0"/>
+                                          <Component id="jLabel_SL" pref="57" max="32767" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="jComboBox_Size" min="-2" pref="110" max="-2" attributes="0"/>
+                                          <Component id="jComboBox_SoLuong" min="-2" pref="110" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="-2" pref="133" max="-2" attributes="0"/>
+                                      <Component id="jButton_RF" min="-2" pref="29" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                           </Group>
@@ -449,33 +452,33 @@
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="310" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel_MaSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                          <Component id="jTextFeild_MaSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jButton_RF" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel_MaSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="jTextFeild_MaSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jTextFeild_TenSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Component id="jLabel_TenSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="jTextFeild_TenSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                      <Component id="jLabel_TenSP" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="jComboBox_Size" alignment="1" min="-2" pref="26" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel_DonGia" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                   <Component id="jTextFeild_DonGia" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                                   <Component id="jLabel_SL" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="jComboBox_SoLuong" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel_Size" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Component id="jComboBox_Size" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jComboBox_SoLuong" min="-2" pref="25" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="jLabel_Size" min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
                       <Component id="jButton_ThemSanPhamHoaDon" min="-2" pref="38" max="-2" attributes="0"/>
@@ -512,11 +515,11 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="5" rowCount="0">
-                        <Column editable="true" title="STT" type="java.lang.Object"/>
-                        <Column editable="true" title="M&#xe3; s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
-                        <Column editable="true" title="T&#xea;n S&#x1ea3;n Ph&#x1ea9;m" type="java.lang.Object"/>
-                        <Column editable="true" title="&#x110;&#x1a1;n gi&#xe1;" type="java.lang.Object"/>
-                        <Column editable="true" title="Lo&#x1ea1;i s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
+                        <Column editable="false" title="STT" type="java.lang.Object"/>
+                        <Column editable="false" title="M&#xe3; s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
+                        <Column editable="false" title="T&#xea;n S&#x1ea3;n Ph&#x1ea9;m" type="java.lang.Object"/>
+                        <Column editable="false" title="&#x110;&#x1a1;n gi&#xe1;" type="java.lang.Object"/>
+                        <Column editable="false" title="Lo&#x1ea1;i s&#x1ea3;n ph&#x1ea9;m" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -657,6 +660,19 @@
               </Properties>
               <Events>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFeild_TimKiemSanPhamKeyReleased"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButton_RF">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="66" red="66" type="rgb"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/image/refresh (1).png"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton_RFActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
