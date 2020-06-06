@@ -43,7 +43,13 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
             ResultSet rs = ps.executeQuery();
             //storeHouseList.clear();
             Object[] obj = new Object[]{"STT", "Mã Loại", "Tên Loại"};
-            tbn = new DefaultTableModel(obj, 0);
+            tbn = new DefaultTableModel(obj, 0){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    //all cells false
+                    return false;
+                }
+            };
             jTable_DSLoai.setModel(tbn);
             int c = 0;
             try {
@@ -128,18 +134,6 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
             ps1.executeUpdate();
         } catch (Exception e) {
             System.err.println(e.toString());
-        }
-    }
-
-    private void suaLoaiTrongGiayDep(String maLoai) {
-        String sql = "update GIAYDEP set MALOAI=? where MALOAI=?";
-        try {
-            PreparedStatement ps = ketNoi.prepareStatement(sql);
-            ps.setString(1, "KHAC");
-            ps.setString(2, maLoai);
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(DanhSachLoaiJFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -361,15 +355,7 @@ public class DanhSachLoaiJFrame extends javax.swing.JFrame {
         } else if (tenLoai.equals("")) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập tên loại");
         } else if (checkMaLoai(maLoai) == 1) {
-            Object[] options = {"Đồng ý", "Hủy"};
-            int chon = JOptionPane.showOptionDialog(this, "Mã loại bạn đang chọn hiện đang chứa sản phẩm. Sản phẩm sẽ sửa thành loại 'Khác'. Bạn đồng ý chứ?",
-                    "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-            if (chon == JOptionPane.YES_OPTION) {
-                suaLoaiTrongGiayDep(maLoai);
-                JOptionPane.showMessageDialog(this, "Xóa thành công loại sản phẩm!");
-                XoaLoaiChuaTonTaiMaSanPham(maLoai);
-                loadData();
-            }
+            JOptionPane.showMessageDialog(this, "Mã loại bạn đang chọn hiện đang chứa sản phẩm nên không thể xóa!");
         } else {
             Object[] options = {"Đồng ý", "Hủy"};
             int chon = JOptionPane.showOptionDialog(this, "Bạn có chắc muốn xóa loại sản phẩm này không?",

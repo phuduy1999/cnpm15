@@ -47,11 +47,20 @@ public class ChuyenManHinh {
     public ChuyenManHinh(JPanel root, String user) throws SQLException {
         this.root = root;
         username = user;
-        hoaDon = new HoaDonJPanel(username);
-        khachHang = new KhachHangJPanel(username);
-        baoCao = new BaoCaoJPanel(username);
-        kho = new KhoJPanel(username);
-        kho2 = new KhoJPanel(username, layQuyen());
+        String q = layQuyen();
+        if (q.equals("admin")) {
+            hoaDon = new HoaDonJPanel(username);
+            khachHang = new KhachHangJPanel(username);
+            baoCao = new BaoCaoJPanel(username);
+            kho = new KhoJPanel(username);
+        } else if (q.equals("boss")) {
+            baoCao = new BaoCaoJPanel(username);
+            kho2 = new KhoJPanel(username, q);
+        } else if (q.equals("Nhân viên")) {
+            hoaDon = new HoaDonJPanel(username);
+            khachHang = new KhachHangJPanel(username);
+            kho = new KhoJPanel(username);
+        }
     }
 
     private String layQuyen() {
@@ -118,42 +127,20 @@ public class ChuyenManHinh {
                     node = new TrangChuJPanel();
                     break;
                 case "SanPham":
-                    if (q.equalsIgnoreCase("boss")) {
-                        JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
-                        setChangeBackGround(kind);
-                        return;
-                    } else {
-                        node = hoaDon;
-                    }
+                    node = hoaDon;
                     break;
                 case "Kho":
                     if (q.equalsIgnoreCase("boss")) {
-                        JOptionPane.showMessageDialog(root, "Với quyền truy cập này bạn chỉ có thể tra cứu số lượng tồn "
-                                + "và lập báo cáo");
-                        node = kho2;
-                    } else if (q.equalsIgnoreCase("admin")) {
                         node = kho2;
                     } else {
                         node = kho;
                     }
                     break;
                 case "KhachHang":
-                    if (q.equalsIgnoreCase("boss")) {
-                        JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
-                        setChangeBackGround(kind);
-                        return;
-                    } else {
-                        node = khachHang;
-                    }
+                    node = khachHang;
                     break;
                 case "BaoCao":
-                    if (q.equalsIgnoreCase("Nhân viên")) {
-                        JOptionPane.showMessageDialog(root, "Bạn không đủ quyền truy cập chức năng của ứng dụng");
-                        setChangeBackGround(kind);
-                        return;
-                    } else {
-                        node = baoCao;
-                    }
+                    node = baoCao;
                     break;
                 default:
                     break;

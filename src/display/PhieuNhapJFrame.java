@@ -110,7 +110,13 @@ public class PhieuNhapJFrame extends javax.swing.JFrame {
 
     private void loadDataPhieuNhap() {
         try {
-            DefaultTableModel tbn = new DefaultTableModel();
+            DefaultTableModel tbn = new DefaultTableModel(){
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    //all cells false
+                    return false;
+                }
+            };
             int number;
             Vector row, column;
             column = new Vector();

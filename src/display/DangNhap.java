@@ -100,6 +100,9 @@ public class DangNhap extends javax.swing.JFrame {
                 ps.setString(2, MaHoaPassword.encodeString(password));
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
+                    if(!rs.getString("USERNAME").equals(username)){
+                        break;// loi sql ko so sanh hoa thuong
+                    }
                     if(rs.getBoolean("TRANGTHAI")==false){
                         JOptionPane.showMessageDialog(this, "Tài khoản của bạn đã bị khóa!");
                         return;

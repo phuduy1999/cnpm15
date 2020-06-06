@@ -10,6 +10,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -51,7 +52,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             ResultSet rs = ps.executeQuery();
             DSKhachHang.clear(); //moi lan lay lai kh phai reset lai list moi (loi bi trung du lieu)
             while (rs.next()) {
-                KhachHang cs = new KhachHang(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4));
+                KhachHang cs = new KhachHang(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5));
                 DSKhachHang.add(cs);
                 if (rs.getString(1).equals("KVL")) {
                     continue; //khach vang lai ko can xuat ra table
@@ -61,6 +62,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 vt.add(rs.getString(2));
                 vt.add(rs.getString(3));
                 vt.add(rs.getString(4));
+                vt.add(rs.getBoolean(5));
                 dtm.addRow(vt);
             }
             JTable_KhachHang.setModel(dtm);
@@ -74,7 +76,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     private void themKhachHang(KhachHang cs) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql = "insert into KHACHHANG values (?,?,?,?)";
+        String sql = "insert into KHACHHANG values (?,?,?,?,?)";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
             ps.setString(1, cs.getMaKH());
@@ -85,10 +87,10 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 ps.setString(3, cs.getNgaySinh());
             }
             ps.setString(4, cs.getDiaChi());
+            ps.setBoolean(5, cs.getTrangThai());
             ps.executeUpdate();
             ps.close();
             ketNoi.close();
-            DSKhachHang.add(cs);
         } catch (SQLException ex) {
             Logger.getLogger(KhachHangJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -103,12 +105,6 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             ps.executeUpdate();
             ps.close();
             ketNoi.close();
-            for (KhachHang cs : DSKhachHang) {
-                if (cs.getMaKH().equals(maKH)) {
-                    DSKhachHang.remove(cs);
-                    break;
-                }
-            }
         } catch (SQLException ex) {
             Logger.getLogger(KhachHangJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -135,12 +131,12 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         }
     }
 
-    private void suaHoaDon(String maKH) { //khi xoa 1 khach hang da tung mua hang du lieu se doi lai la KVL
+    private void doiTrangThaiKH(String maKH, boolean trangThai) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql = "update HOADON set MAKH=? where MAKH=?";
+        String sql = "update KHACHHANG set TRANGTHAI=? where MAKH=?";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql);
-            ps.setString(1, "KVL");
+            ps.setBoolean(1, trangThai);
             ps.setString(2, maKH);
             ps.executeUpdate();
             ps.close();
@@ -200,6 +196,14 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         jTextField_SDTKhachHang.setText("");
         jDateChooser_KhachHang.setCalendar(null);
         jLabel_LOISDT.setVisible(false);
+    }
+
+    private boolean soSanhNgay(Date hienTai, Date ngaySinh) {
+        if (hienTai.before(ngaySinh)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -334,11 +338,11 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "SĐT", "Họ và tên", "Ngày Sinh", "Địa chỉ"
+                "SĐT", "Họ và tên", "Ngày Sinh", "Địa chỉ", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -533,46 +537,88 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             ngaySinh = sdf.format(jDateChooser_KhachHang.getDate()); // Date->String
         }
+        Calendar cal = Calendar.getInstance();
+        Date hienTai = cal.getTime();
 
+        String regexTen = "^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ\\s]+$";
         boolean cohieu = true;
         if (maKH.equals("")) {
             JOptionPane.showMessageDialog(this, "Bạn cần nhập mã khách hàng là sđt của khách!");
-            return;
-        }
-        if (maKH.matches("^(\\+84|0)\\d{9,10}$") == false) {
+            cohieu = false;
+        } else if (maKH.matches("^(\\+84|0)\\d{9,10}$") == false) {
             jLabel_LOISDT.setVisible(true);
             jTextField_SDTKhachHang.requestFocus();
             cohieu = false;
-        }
-        if (tenKH.equals("")) {
+        } else if (tenKH.equals("")) {
             JOptionPane.showMessageDialog(this, "Bạn cần nhập tên khách hàng!");
-            return;
+            cohieu = false;
+        } else if (tenKH.matches(regexTen) == false) {
+            JOptionPane.showMessageDialog(this, "Tên khách hàng không đúng định dạng(Không chứa số,...)");
+            cohieu = false;
+        } else if (soSanhNgay(hienTai, jDateChooser_KhachHang.getDate()) == false) {
+            JOptionPane.showMessageDialog(this, "Ngày sinh không thể trước ngày hiện tại!");
+            cohieu = false;
         }
         if (cohieu == true) {
             int c = checkMaKH_SDT(maKH);
             if (c == 1) {
-                JOptionPane.showMessageDialog(this, "Mã khách hàng với sđt trên đã bị trùng. Vui lòng kiểm tra lại!");
+                boolean k = false;
+                for (KhachHang x : DSKhachHang) {
+                    if (maKH.equals(x.getMaKH())) {
+                        if (x.getTrangThai() == false) {
+                            Object[] options = {"Đồng ý", "Hủy"};
+                            int chon = JOptionPane.showOptionDialog(this, "Khách hàng đã bị khóa bạn có muốn khôi phục lại?",
+                                    "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+                            if (chon == JOptionPane.YES_OPTION) {
+                                doiTrangThaiKH(maKH, true);
+                                JOptionPane.showMessageDialog(this, "Khôi phục khách hàng thành công!");
+                                k = true;
+                            }
+                        }
+                    }
+                }
+                if (k == false) {
+                    JOptionPane.showMessageDialog(this, "Mã khách hàng với sđt trên đã bị trùng. Vui lòng kiểm tra lại!");
+                }
             } else {
-                KhachHang cs = new KhachHang(maKH, tenKH, ngaySinh, diaChi);
+                KhachHang cs = new KhachHang(maKH, tenKH, ngaySinh, diaChi, true);
                 themKhachHang(cs);
                 JOptionPane.showMessageDialog(this, "Đã thêm thành công khách hàng mới!");
             }
+            this.layKhachHang();
         }
-        this.layKhachHang();
     }//GEN-LAST:event_jButton_ThemKhachHangActionPerformed
 
     private void jButton_SuaKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SuaKhachHangActionPerformed
         String maKH = jTextField_SDTKhachHang.getText();
+        String tenKH = chuanHoaChuoiHoTen(jTextField_TenKhachHang.getText());
+        String regexTen = "^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳýỵỷỹ\\s]+$";
+        Calendar cal = Calendar.getInstance();
+        Date hienTai = cal.getTime();
+        if (maKH.equals("")) {
+            JOptionPane.showMessageDialog(this, "Bạn cần nhập mã khách hàng!");
+            return;
+        }
         int c = checkMaKH_SDT(maKH);
         if (c == 0) {
             JOptionPane.showMessageDialog(this, "Mã khách hàng hiện chưa có. Vui lòng thêm mới!");
         } else {
-            String tenKH = jTextField_TenKhachHang.getText();
+            if (tenKH.equals("")) {
+                JOptionPane.showMessageDialog(this, "Bạn cần nhập tên khách hàng!");
+                return;
+            } else if (tenKH.matches(regexTen) == false) {
+                JOptionPane.showMessageDialog(this, "Tên khách hàng không đúng định dạng(Không chứa số,...)");
+                return;
+            }
             String diaChi = jTextArea_DiaChiKhachHang.getText();
             String ngaySinh = "";
             if (jDateChooser_KhachHang.getDate() != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                 ngaySinh = sdf.format(jDateChooser_KhachHang.getDate());
+            }
+            if (soSanhNgay(hienTai, jDateChooser_KhachHang.getDate()) == false) {
+                JOptionPane.showMessageDialog(this, "Ngày sinh không thể trước ngày hiện tại!");
+                return;
             }
             for (KhachHang cs : DSKhachHang) {
                 if (cs.getMaKH().equals(maKH)) {
@@ -601,7 +647,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     private void jButton_XoaKhachHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_XoaKhachHangActionPerformed
         String maKH = jTextField_SDTKhachHang.getText();
         if (maKH.equals("")) {
-            JOptionPane.showMessageDialog(this, "Mã khách hàng cần xóa không được dể trống!");
+            JOptionPane.showMessageDialog(this, "Mã khách hàng cần xóa không được để trống!");
         } else {
             int c = checkMaKH_SDT(maKH);
             if (c == 0) {
@@ -612,17 +658,16 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                         "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                 if (chon == JOptionPane.YES_OPTION) {
                     if (checkMaKH_MuaHang(maKH) == 1) {
-                        int chon1 = JOptionPane.showOptionDialog(this, "Khách hàng đã từng mua hàng, sau khi xóa sẽ "
-                                + "cập nhật đơn hàng thành khách vãng lai?",
+                        int chon1 = JOptionPane.showOptionDialog(this, "Khách hàng đã từng mua hàng, khi xóa sẽ khóa thông tin khách hàng ?",
                                 "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                         if (chon1 == JOptionPane.YES_OPTION) {
-                            suaHoaDon(maKH);
-                        } else {
-                            return;
+                            doiTrangThaiKH(maKH, false);
+                            JOptionPane.showMessageDialog(this, "Khóa khách hàng thành công!");
                         }
+                    } else {
+                        xoaKhachHang(maKH);
+                        JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công!");
                     }
-                    xoaKhachHang(maKH);
-                    JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công!");
                     this.layKhachHang();
                 } else {
                     lamMoi();
@@ -697,6 +742,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 vt.add(x.getHoTen());
                 vt.add(x.getNgaySinh());
                 vt.add(x.getDiaChi());
+                vt.add(x.getTrangThai());
                 dtm.addRow(vt);
             }
         }

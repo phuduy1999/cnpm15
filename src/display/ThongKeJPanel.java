@@ -83,15 +83,25 @@ public class ThongKeJPanel extends javax.swing.JPanel {
         jPanel_BieuDo.validate();
     }
 
+    private boolean soSanhNgay(Date date1, Date date2) {
+        if (date2.before(date1)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private int checkDate(Date date1, Date date2) {
         int result = 0;
         if (date1 == null) {
             JOptionPane.showMessageDialog(this, "Thông tin ngày đầu không được bỏ trống");
-            return 1;
-        }
-        if (date2 == null) {
+            result = 1;
+        } else if (date2 == null) {
             JOptionPane.showMessageDialog(this, "Thông tin ngày cuối không được bỏ trống");
-            return 1;
+            result = 1;
+        } else if (soSanhNgay(date1, date2) == false) {
+            JOptionPane.showMessageDialog(this, "Ngày cuối cùng lấy thông tin không được trước ngày bắt đầu lấy thông tin!");
+            result = 1;
         }
         return result;
     }

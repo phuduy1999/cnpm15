@@ -54,11 +54,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                 vt.add(rs.getString("PHONE"));
                 vt.add(rs.getString("EMAIL"));
                 vt.add(rs.getString("USERNAME"));
-                if (layQuyen(rs.getString("USERNAME")).equals("admin")) {
-                    vt.add(rs.getString("PASSWORD")); //ko hien matkhau admin
-                } else {
-                    vt.add(MaHoaPassword.decodeString(rs.getString("PASSWORD")));
-                }
                 vt.add(rs.getString("AUTHORIZE"));
                 vt.add(rs.getBoolean("TRANGTHAI"));
                 dtm.addRow(vt);
@@ -68,8 +63,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             ps.close();
             ketNoi.close();
         } catch (SQLException ex) {
-            Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
             Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -101,6 +94,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         } else if (user.matches("^[a-zA-Z0-9\\._\\-]{3,}$") == false) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Tên đăng nhập không đúng định dạng");
+        } else if (hoTen.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Họ tên không được bỏ trống");
         } else if (password.equals("")) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Mật khẩu không được bỏ trống");
@@ -116,9 +112,33 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         } else if (email.matches("^([a-zA-Z0-9](\\.|_){0,1})+[a-zA-Z0-9]+@[a-zA-Z0-9]+((\\.){0,1}[a-zA-Z0-9]){0,}\\.[a-zA-Z]{2,3}") == false) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Email không đúng định dạng");
+        }
+        return check;
+    }
+
+    private int checkFormSua(String user, String sdt, String email, String hoTen) {
+        int check = 0;
+        if (user.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập không được bỏ trống");
+        } else if (user.matches("^[a-zA-Z0-9\\._\\-]{3,}$") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Tên đăng nhập không đúng định dạng");
         } else if (hoTen.equals("")) {
             check = 1;
             JOptionPane.showMessageDialog(this, "Họ tên không được bỏ trống");
+        } else if (sdt.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Số điện thoại không được bỏ trống");
+        } else if (sdt.matches("^(\\+84|0)\\d{9,10}$") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Số điện thoại không đúng định dạng");
+        } else if (email.equals("")) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Email không được bỏ trống");
+        } else if (email.matches("^([a-zA-Z0-9](\\.|_){0,1})+[a-zA-Z0-9]+@[a-zA-Z0-9]+((\\.){0,1}[a-zA-Z0-9]){0,}\\.[a-zA-Z]{2,3}") == false) {
+            check = 1;
+            JOptionPane.showMessageDialog(this, "Email không đúng định dạng");
         }
         return check;
     }
@@ -212,7 +232,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             ps.setString(1, user);
             ps.setString(2, MaHoaPassword.encodeString(password));
             ps.setString(3, chucVu);
-            ps.setInt(4, 1);
+            ps.setBoolean(4, true);
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
@@ -253,21 +273,18 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         return result;
     }
 
-    private void suaNhanVien(String user, String password, String chucVu, String hoTen, String sdt, String email) {
+    private void suaNhanVien(String user, String chucVu, String hoTen, String sdt, String email) {
         Connection ketNoi = KetNoi.layKetNoi();
-        String sql1 = "update ACCOUNT set USERNAME=?,PASSWORD=?,AUTHORIZE=? where USERNAME=?";
+        String sql1 = "update ACCOUNT set USERNAME=?,AUTHORIZE=? where USERNAME=?";
         String sql2 = "update NHANVIEN set HOTEN=?,PHONE=?,EMAIL=? where USERNAME=?";
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql1);
             ps.setString(1, user); //ten user moi
-            ps.setString(2, MaHoaPassword.encodeString(password));
-            ps.setString(3, chucVu);
-            ps.setString(4, userCanSua); //dc luu lai khi click 1 dong table
+            ps.setString(2, chucVu);
+            ps.setString(3, userCanSua); //dc luu lai khi click 1 dong table
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(BaoCaoJPanel.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(NhanVienJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             PreparedStatement ps = ketNoi.prepareStatement(sql2);
@@ -575,11 +592,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã NV", "Họ Tên", "SDT", "Email", "Tên Đăng Nhập", "Mật khẩu", "Chức vụ", "Trạng thái"
+                "Mã NV", "Họ Tên", "SDT", "Email", "Tên Đăng Nhập", "Chức vụ", "Trạng thái"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -592,9 +609,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable_DSNhanVien);
-        if (jTable_DSNhanVien.getColumnModel().getColumnCount() > 0) {
-            jTable_DSNhanVien.getColumnModel().getColumn(5).setResizable(false);
-        }
 
         jLabel_TTNV.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         jLabel_TTNV.setForeground(new java.awt.Color(255, 153, 153));
@@ -689,8 +703,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         String power = "";
         power = (String) jComboBox_ChucVu.getSelectedItem();
         int checkForm = this.checkForm(user, password, sdt, email, hoTen);
-        if (checkForm != 1) {
-            int result = checkThongTinUser(user, sdt, email);
+        int result = checkThongTinUser(user, sdt, email);
+        if (checkForm != 1 || result == 2) {
             if (result == 0) {
                 this.themNhanVien(user, password, power, sdt, email, hoTen);
                 JOptionPane.showMessageDialog(this, "Đăng ký tài khoản thành công !!");
@@ -731,9 +745,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             String sdt = jTextField_SDT.getText();
             String email = jTextField_Email.getText();
             String tenNV = jTextField_TenNV.getText();
-            String password = jTextField_MK.getText();
             String chucVu = jComboBox_ChucVu.getSelectedItem().toString();
-            int check = checkForm(user, password, sdt, email, tenNV);
+            int check = checkFormSua(user, sdt, email, tenNV);
             int check2 = checkUsernameTonTai(userCanSua);
             if (check != 1 && check2 != 1) {
                 int check3 = checkSDTEM(sdt, email);
@@ -743,7 +756,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                         int chon = JOptionPane.showOptionDialog(this, "Bạn cần đăng xuất và đăng nhập lại sau khi sửa tên đăng nhập?",
                                 "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
                         if (chon == JOptionPane.YES_OPTION) {
-                            suaNhanVien(user, password, chucVu, tenNV, sdt, email);
+                            suaNhanVien(user, chucVu, tenNV, sdt, email);
                             JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
                             layDanhSachNV();
                             ((Window) getRootPane().getParent()).dispose(); //đóng cửa số sau khi sửa
@@ -754,7 +767,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                             dangNhap.setVisible(true);
                         }
                     } else {
-                        suaNhanVien(user, password, chucVu, tenNV, sdt, email);
+                        suaNhanVien(user, chucVu, tenNV, sdt, email);
                         JOptionPane.showMessageDialog(this, "Chỉnh sửa thành công");
                         layDanhSachNV();
                     }
@@ -773,11 +786,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
         if (dtm.getValueAt(i, 4).toString().equals("admin")) { //khong duoc sua 1 vai thuoc tinh cua admin khoa textfeild
             jTextField_TenDN.setEnabled(false);
-            jTextField_MK.setEnabled(false);
             jComboBox_ChucVu.setEnabled(false);
         } else {
             jTextField_TenDN.setEnabled(true);
-            jTextField_MK.setEnabled(true);
             jComboBox_ChucVu.setEnabled(true);
         }
 
@@ -790,8 +801,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jTextField_SDT.setText(dtm.getValueAt(i, 2).toString());
         jTextField_Email.setText(dtm.getValueAt(i, 3).toString());
         jTextField_TenDN.setText(dtm.getValueAt(i, 4).toString());
-        jTextField_MK.setText(dtm.getValueAt(i, 5).toString());
-        jComboBox_ChucVu.setSelectedItem(dtm.getValueAt(i, 6));
+        jComboBox_ChucVu.setSelectedItem(dtm.getValueAt(i, 5));
+        jTextField_MK.setEnabled(false);
         userCanSua = dtm.getValueAt(i, 4).toString();
     }//GEN-LAST:event_jTable_DSNhanVienMouseClicked
 

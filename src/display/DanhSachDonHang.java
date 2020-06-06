@@ -19,12 +19,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Administrator
  */
-public class LichSuHD extends javax.swing.JFrame {
+public class DanhSachDonHang extends javax.swing.JFrame {
 
     /**
      * Creates new form LichSuHD
      */
-    public LichSuHD() {
+    public DanhSachDonHang() {
         initComponents();
         layHoaDon();
     }
@@ -51,7 +51,7 @@ public class LichSuHD extends javax.swing.JFrame {
             rs.close();
             ketNoi.close();
         } catch (SQLException ex) {
-            Logger.getLogger(LichSuHD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DanhSachDonHang.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -82,7 +82,7 @@ public class LichSuHD extends javax.swing.JFrame {
             rs.close();
             ketNoi.close();
         } catch (SQLException ex) {
-            Logger.getLogger(LichSuHD.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DanhSachDonHang.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -218,20 +218,21 @@ public class LichSuHD extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LichSuHD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DanhSachDonHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LichSuHD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DanhSachDonHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LichSuHD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DanhSachDonHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LichSuHD.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DanhSachDonHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LichSuHD().setVisible(true);
+                new DanhSachDonHang().setVisible(true);
             }
         });
     }

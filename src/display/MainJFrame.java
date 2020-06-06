@@ -1,7 +1,11 @@
 package display;
 
+import Conection.KetNoi;
 import Controller.ChuyenManHinh;
 import category.DanhMuc;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Level;
@@ -22,17 +26,52 @@ public class MainJFrame extends javax.swing.JFrame {
         this.username = user;
         jTextFieldRound_user.setText(username);
         setTitle("Phần mềm quản lý shop giày dép");
+        setManHinh();
+    }
+
+    private void setManHinh() throws SQLException {
+        String q = layQuyen();
         ChuyenManHinh dieuKhien = new ChuyenManHinh(jpnView, username);
         dieuKhien.setView(jpnTrangChu, jlbTrangChu);
-
         List<category.DanhMuc> listItem = new ArrayList<>();
         listItem.add(new DanhMuc("TrangChu", jpnTrangChu, jlbTrangChu));
-        listItem.add(new DanhMuc("SanPham", jpnSanPham, jlbSanPham));
-        listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
-        listItem.add(new DanhMuc("KhachHang", jpnKhachHang, jlbKhachHang));
-        listItem.add(new DanhMuc("BaoCao", jpnBaoCao, jlbBaoCao));
-
+        if (q.equals("admin")) {
+            listItem.add(new DanhMuc("SanPham", jpnSanPham, jlbSanPham));
+            listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
+            listItem.add(new DanhMuc("KhachHang", jpnKhachHang, jlbKhachHang));
+            listItem.add(new DanhMuc("BaoCao", jpnBaoCao, jlbBaoCao));
+        } else if (q.equals("boss")) {
+            listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
+            listItem.add(new DanhMuc("BaoCao", jpnBaoCao, jlbBaoCao));
+            jpnKhachHang.setVisible(false);
+            jpnSanPham.setVisible(false);
+        } else if (q.equals("Nhân viên")) {
+            listItem.add(new DanhMuc("SanPham", jpnSanPham, jlbSanPham));
+            listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
+            listItem.add(new DanhMuc("KhachHang", jpnKhachHang, jlbKhachHang));
+            jpnBaoCao.setVisible(false);
+        }
         dieuKhien.setEvent(listItem);
+    }
+
+    private String layQuyen() {
+        Connection ketNoi = KetNoi.layKetNoi();
+        String sql = "select AUTHORIZE from ACCOUNT where USERNAME=?";
+        String quyen = "";
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                quyen = rs.getString(1);
+            }
+            rs.close();
+            ps.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return quyen;
     }
 
     //changePassword viewChangePassword = new DoiMatKhau();
@@ -404,22 +443,11 @@ public class MainJFrame extends javax.swing.JFrame {
         int i = JOptionPane.showOptionDialog(this, "Khi refresh các tiến trình đang thực hiện sẽ bị mất?",
                 "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         if (i == JOptionPane.YES_OPTION) {
-            ChuyenManHinh dieuKhien = null;
             try {
-                dieuKhien = new ChuyenManHinh(jpnView, username);
+                setManHinh();
             } catch (SQLException ex) {
                 Logger.getLogger(MainJFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            dieuKhien.setView(jpnTrangChu, jlbTrangChu);
-
-            List<category.DanhMuc> listItem = new ArrayList<>();
-            listItem.add(new DanhMuc("TrangChu", jpnTrangChu, jlbTrangChu));
-            listItem.add(new DanhMuc("SanPham", jpnSanPham, jlbSanPham));
-            listItem.add(new DanhMuc("Kho", jpnKho, jlbKho));
-            listItem.add(new DanhMuc("KhachHang", jpnKhachHang, jlbKhachHang));
-            listItem.add(new DanhMuc("BaoCao", jpnBaoCao, jlbBaoCao));
-
-            dieuKhien.setEvent(listItem);
         }
     }//GEN-LAST:event_jButton_RefreshActionPerformed
 
